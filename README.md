@@ -3,4 +3,3 @@ Group project for PB138 class @fi.muni.cz. Web portal for statistics and compari
 
 GitHub repositary: https://github.com/branci/hc-sparta-stats
 Project webpage: http://branci.github.io/hc-sparta-stats/
-Project wiki page: http://hc-sparta-stats.wikidot.com
