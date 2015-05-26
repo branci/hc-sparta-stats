@@ -31,9 +31,9 @@ public class IdioticParsing {
         DatabaseManager db = new DatabaseManager(dataSource);
         Parsing parse = new Parsing(db);
         ParsingPlayerStats pps = new ParsingPlayerStats(dataSource);
-        for (int i = firstSeason; i <= lastSeason; i++) {
+        for (int i = lastSeason; i >= firstSeason; i--) {
 
-            String url = "http://www.hcsparta.cz/zapas.asp" + "?sezona=" + i;
+            String url = "http://www.hcsparta.cz/zapas.asp?sezona=" + i;
             Document doc = Jsoup.connect(url).get();
             Elements links = doc.select("a.ico_report");
             for (Element link : links) {

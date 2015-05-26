@@ -77,6 +77,7 @@ public class ParsingClassPlayers {
                         
                         try (PreparedStatement st = conn.prepareStatement(sql))
                         {
+                            //System.out.println(item.child(2).text());
                             st.setString(1, item.child(2).text());
                             String[] age = item.child(4).text().split(" ");
                             st.setInt(2, Integer.parseInt(age[0]));

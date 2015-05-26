@@ -31,24 +31,23 @@ public class Parsing {
         this.db = db;
     }
     
-    
-    
     public ArrayList<String> getAllNames(Document doc)
     {
         ArrayList<String> apn = new ArrayList<String>();
         Elements statsTable = doc.getElementById("tab_box_1").child(0).child(0).children();
         for (Element player: statsTable)
-        {
+        {   
+            //System.out.println(player.child(0).text());
             String [] names = player.child(0).text().split(" ");
             if (names.length != 2) continue;
             apn.add(player.child(0).text());
         }
-        return apn;
-        
+        return apn;       
     }
+    
     public void parseDate(String date,Match match){
         String[] array = date.split(",");
-   
+        
         array = array[1].split(" ");
         
         array = array[2].split("\\.");
@@ -106,6 +105,7 @@ public class Parsing {
                match.setBestPlayer(gameDetails.substring(gameDetails.indexOf("-", gameDetails.indexOf("Nejlepší hráč utkání: ") + "Nejlepší hráč utkání: ".length()) + 1).replace(" ", "").replace(".",""));
         }
         db.addMatch(match);
+        System.out.println(match);
         if(match.getSpartaGoals() != 0)
            parseGoals(gameDetails.substring(gameDetails.indexOf("Branky a nahrávky: ") + "Branky a nahrávky: ".length(), gameDetails.indexOf("Rozhodčí:") - 2), match);
     }
@@ -173,8 +173,9 @@ public class Parsing {
                 goalID++;
                 continue;
             }
-            if(part.contains(".")){
+            if(part.contains(".") && part.length() == 2){
                 tmp = " " + part;
+                //System.out.println("CAST: "+ tmp);
                 continue;
             }
                 
@@ -183,18 +184,22 @@ public class Parsing {
                 assist.setId(assistID);
                 assist.setGoal(goal.getId());
                 assist.setMatch(match.getId());
-                assist.setPlayer(part.replace(")", "").replace(",","").replace("(", "")); 
+                assist.setPlayer(part.replace(")", "").replace(",","").replace("(", "") + tmp);
+                tmp = ""; 
                 assist.setPlayerID(getIdOfPlayer(assist.getPlayer()));
                 db.addAssist(assist);
-                System.out.println(assist);
+                if(assist.getPlayerID() == 0) System.out.println(assist);
+                //System.out.println(assist);
                 assistID++;
                 continue;
             }
             if(!isUpperCase((int) part.charAt(0))) continue;
+            
             goal.setPlayer(part.replace(",", "") + tmp);
             goal.setPlayerID(getIdOfPlayer(goal.getPlayer()));
             db.addGoal(goal);
-            System.out.println(goal);
+            if(goal.getPlayerID() == 0) System.out.println(goal);
+             //System.out.println(goal);
             tmp = "";
         }
     }
@@ -211,7 +216,8 @@ public class Parsing {
         
         int goals = Integer.parseInt(sparta.child(1).text());
         match.setSpartaGoals(goals);
-        parsePlayers(sparta.child(2).text().substring(sparta.child(2).text().indexOf(":") + 1, sparta.child(2).text().indexOf("Trenér:") - 1),match.getId());
+        System.out.println(sparta.child(2).text().indexOf("Trenér:") - 1);
+        parsePlayers(sparta.child(2).text().substring(sparta.child(2).text().indexOf(":") + 1, sparta.child(2).text().indexOf("Trenér") - 1),match.getId());
     }
     
     public void parsePlayers(String text, int id) throws SQLException{
