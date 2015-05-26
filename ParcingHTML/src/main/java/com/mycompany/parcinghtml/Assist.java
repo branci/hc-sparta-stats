@@ -10,6 +10,7 @@ package com.mycompany.parcinghtml;
  * @author kristian
  */
 public class Assist {
+    // toto sa ucim s gitom kurna
     private int id;
     private int match;
     private String player;
