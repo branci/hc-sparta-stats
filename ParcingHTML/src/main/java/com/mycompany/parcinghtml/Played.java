@@ -12,6 +12,15 @@ package com.mycompany.parcinghtml;
 public class Played {
     private int match;
     private String player;
+    private int playerID;
+
+    public int getPlayerID() {
+        return playerID;
+    }
+
+    public void setPlayerID(int playerID) {
+        this.playerID = playerID;
+    }
 
     public int getMatch() {
         return match;
@@ -39,8 +48,10 @@ public class Played {
 
     @Override
     public String toString() {
-        return "Played{" + "match=" + match + ", player=" + player + '}';
+        return "Played{" + "match=" + match + ", player=" + player + ", playerID=" + playerID + '}';
     }
+
+    
 
     @Override
     public boolean equals(Object obj) {

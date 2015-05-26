@@ -10,16 +10,26 @@ package com.mycompany.parcinghtml;
  * @author kristian
  */
 public class Assist {
-    // toto sa ucim s gitom kurna
     private int id;
     private int match;
     private String player;
     private int goal;
+    private int playerID;
+
+    public int getPlayerID() {
+        return playerID;
+    }
+
+    public void setPlayerID(int playerID) {
+        this.playerID = playerID;
+    }
 
     @Override
     public String toString() {
-        return "Assist{" + "id=" + id + ", match=" + match + ", player=" + player + ", goal=" + goal + '}';
+        return "Assist{" + "id=" + id + ", match=" + match + ", player=" + player + ", goal=" + goal + ", playerID=" + playerID + '}';
     }
+
+   
 
     public int getGoal() {
         return goal;

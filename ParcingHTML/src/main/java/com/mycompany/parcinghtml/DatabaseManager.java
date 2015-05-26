@@ -21,6 +21,10 @@ import javax.sql.DataSource;
 public class DatabaseManager {
     
     private final DataSource dataSource;
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
     final static Logger log = Logger.getLogger(DatabaseManager.class.getName());
         
     
@@ -67,12 +71,13 @@ public class DatabaseManager {
         }
     }
     public void addPlayed(Played played) throws SQLException {
-        String sql = "INSERT INTO PLAYED(MATCH_ID,PLAYER_NAME) VALUES(?,?)";
+        String sql = "INSERT INTO PLAYED(MATCH_ID,PLAYER_NAME, PLAYERID) VALUES(?,?,?)";
         try (Connection conn = dataSource.getConnection()) {
             conn.setAutoCommit(false);
             try (PreparedStatement st = conn.prepareStatement(sql)) {
                 st.setInt(1, played.getMatch());
-                st.setString(2,  played.getPlayer());             
+                st.setString(2,  played.getPlayer()); 
+                st.setInt(3, played.getPlayerID());
                 st.executeUpdate();
                 conn.commit();
             }catch(SQLException ex){
@@ -84,7 +89,7 @@ public class DatabaseManager {
     }
     
     public void addGoal(Goal goal) throws SQLException {
-        String sql = "INSERT INTO GOAL(GOAL_ID,MATCH_ID,PLAYER_NAME, \"MINUTE\") VALUES(?,?,?,?)";
+        String sql = "INSERT INTO GOAL(GOAL_ID,MATCH_ID,PLAYER_NAME, \"MINUTE\", PLAYERID) VALUES(?,?,?,?,?)";
         try (Connection conn = dataSource.getConnection()) {
             conn.setAutoCommit(false);
             try (PreparedStatement st = conn.prepareStatement(sql)) {
@@ -93,6 +98,7 @@ public class DatabaseManager {
                 st.setInt(2, goal.getMatch());
                 st.setString(3, goal.getPlayer());
                 st.setInt(4, goal.getMinit());
+                st.setInt(5, goal.getPlayerID());
                 st.executeUpdate();
                 conn.commit();
             } catch (SQLException ex) {
@@ -103,7 +109,7 @@ public class DatabaseManager {
         }
 }
 public void addAssist(Assist assist) throws SQLException {
-        String sql = "INSERT INTO ASSIST(ASSIST_ID,MATCH_ID,PLAYER_NAME,GOAL_ID) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO ASSIST(ASSIST_ID,MATCH_ID,PLAYER_NAME,GOAL_ID, PLAYERID) VALUES(?,?,?,?,?)";
         try (Connection conn = dataSource.getConnection()) {
             conn.setAutoCommit(false);
             try (PreparedStatement st = conn.prepareStatement(sql)) {
@@ -111,6 +117,7 @@ public void addAssist(Assist assist) throws SQLException {
                 st.setInt(2, assist.getMatch());
                 st.setString(3, assist.getPlayer());
                 st.setInt(4, assist.getGoal());
+                st.setInt(5, assist.getPlayerID());
                 st.executeUpdate();
                 conn.commit();
             } catch (SQLException ex) {
@@ -120,5 +127,7 @@ public void addAssist(Assist assist) throws SQLException {
             log.log(Level.SEVERE, "db connection problem", ex);
         }
     }
+
+    
     
 }

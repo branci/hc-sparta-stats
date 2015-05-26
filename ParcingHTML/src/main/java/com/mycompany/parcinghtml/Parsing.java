@@ -7,10 +7,14 @@ package com.mycompany.parcinghtml;
 
 import java.io.IOException;
 import static java.lang.Character.isUpperCase;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import org.jsoup.nodes.Element;
 
 /**
@@ -21,9 +25,26 @@ public class Parsing {
     private final DatabaseManager db;
     private int goalID = 1;
     private int assistID = 1;
+    private ArrayList<String> playerNames;
             
     public Parsing(DatabaseManager db){
         this.db = db;
+    }
+    
+    
+    
+    public ArrayList<String> getAllNames(Document doc)
+    {
+        ArrayList<String> apn = new ArrayList<String>();
+        Elements statsTable = doc.getElementById("tab_box_1").child(0).child(0).children();
+        for (Element player: statsTable)
+        {
+            String [] names = player.child(0).text().split(" ");
+            if (names.length != 2) continue;
+            apn.add(player.child(0).text());
+        }
+        return apn;
+        
     }
     public void parseDate(String date,Match match){
         String[] array = date.split(",");
@@ -41,7 +62,7 @@ public class Parsing {
         Elements gameDate = doc.select("div.game_date > span");
         //Ziskanie datumu zapasu
         parseDate(gameDate.get(0).text(), match);
-        
+        playerNames = getAllNames(doc);
         
         Elements teams = doc.select("div.game_box");
         String gameDetails = doc.select("div.game_details").get(0).text();
@@ -89,6 +110,40 @@ public class Parsing {
            parseGoals(gameDetails.substring(gameDetails.indexOf("Branky a nahrávky: ") + "Branky a nahrávky: ".length(), gameDetails.indexOf("Rozhodčí:") - 2), match);
     }
     
+    
+    private int getIdOfPlayer(String name)
+    {
+        int playerID = 0;
+        String fullName = "";
+        String sql_find_player = "SELECT PLAYERID FROM PLAYERS WHERE (PLAYERS.NAME || '') LIKE ?";
+
+        for (String pname: playerNames)
+        {
+            if (pname.contains(name)) fullName=pname; 
+        }
+        if (fullName.equals("")) return playerID;
+        try (Connection conn = db.getDataSource().getConnection())
+        {
+            try (PreparedStatement ps = conn.prepareStatement(sql_find_player))
+            {
+                
+               String [] names = fullName.split(" ");
+                names[1] = names[1].substring(0, 1);
+                ps.setString(1, "%"+names[1] +"%" + names[0] +"%");
+                ResultSet rs = ps.executeQuery();
+                if (rs.next())
+                {
+                    playerID = rs.getInt("PLAYERID");
+                }
+                
+            }
+        }catch(SQLException ex)
+        {
+            System.out.println("chyba pri hladani hraca");
+        }
+        return playerID;
+    }
+    
     public void parseGoals(String text, Match match) throws SQLException{
 
         if(match.getOpponentGoals() != 0){
@@ -119,7 +174,7 @@ public class Parsing {
                 continue;
             }
             if(part.contains(".")){
-                tmp = ", " + part;
+                tmp = " " + part;
                 continue;
             }
                 
@@ -128,16 +183,18 @@ public class Parsing {
                 assist.setId(assistID);
                 assist.setGoal(goal.getId());
                 assist.setMatch(match.getId());
-                assist.setPlayer(part.replace(")", "").replace(",","").replace("(", ""));             
+                assist.setPlayer(part.replace(")", "").replace(",","").replace("(", "")); 
+                assist.setPlayerID(getIdOfPlayer(assist.getPlayer()));
                 db.addAssist(assist);
-                //System.out.println(assist);
+                System.out.println(assist);
                 assistID++;
                 continue;
             }
             if(!isUpperCase((int) part.charAt(0))) continue;
-            goal.setPlayer(part + tmp);
+            goal.setPlayer(part.replace(",", "") + tmp);
+            goal.setPlayerID(getIdOfPlayer(goal.getPlayer()));
             db.addGoal(goal);
-            //System.out.println("INSERT INTO GOAL (match,player,minit)" + goal.toString());
+            System.out.println(goal);
             tmp = "";
         }
     }
@@ -182,7 +239,7 @@ public class Parsing {
                      played.setMatch(id);
                      played.setPlayer(ret[0] + tmp);
                      tmp = "";
-                     System.out.println(played);
+                     played.setPlayerID(getIdOfPlayer(played.getPlayer()));
                      db.addPlayed(played);
 
                 }       

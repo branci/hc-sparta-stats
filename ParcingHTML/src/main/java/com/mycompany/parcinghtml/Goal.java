@@ -14,6 +14,15 @@ public class Goal {
  private int match;
  private String player;
  private int minit;
+ private int playerID;
+
+    public int getPlayerID() {
+        return playerID;
+    }
+
+    public void setPlayerID(int playerID) {
+        this.playerID = playerID;
+    }
 
     public int getId() {
         return id;
@@ -71,7 +80,9 @@ public class Goal {
 
     @Override
     public String toString() {
-        return "(" + "" + match + ",'" + player + "'," + minit + ");";
+        return "Goal{" + "id=" + id + ", match=" + match + ", player=" + player + ", minit=" + minit + ", playerID=" + playerID + '}';
     }
+
+    
  
 }
