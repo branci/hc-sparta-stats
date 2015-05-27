@@ -1,22 +1,2 @@
-May 27, 2015 11:29:35 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+May 27, 2015 11:49:13 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
 SEVERE: Player wasnt found in db: Assist{id=30, match=6, player=RéwayPolášek, goal=21, playerID=0}
-May 27, 2015 11:29:42 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
-SEVERE: Parsing failed for match with id: Match{id=17, date=2014-10-31, opponent=HC Energie Karlovy Vary, spartaGoals=5, opponentGoals=4, spartaShots=0, opponentShots=0, spartaPenalty=3, opponentPenalty=4, home=domaci, bestPlayer=null, season=2015}
-java.lang.NumberFormatException: For input string: "2,4:2,4:4"
-	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
-	at java.lang.Integer.parseInt(Integer.java:580)
-	at java.lang.Integer.parseInt(Integer.java:615)
-	at com.mycompany.parcinghtml.ParsingMatch.parseMatch(ParsingMatch.java:123)
-	at com.mycompany.parcinghtml.ParsingAllMatches.parsingMatches(ParsingAllMatches.java:45)
-	at com.mycompany.parcinghtml.Main.main(Main.java:41)
-
-May 27, 2015 11:29:44 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
-SEVERE: Parsing failed for match with id: Match{id=20, date=2014-11-16, opponent=PSG Zlín, spartaGoals=3, opponentGoals=4, spartaShots=0, opponentShots=0, spartaPenalty=8, opponentPenalty=10, home=domaci, bestPlayer=null, season=2015}
-java.lang.NumberFormatException: For input string: "1,2:1,2:2,3:2,3:4"
-	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
-	at java.lang.Integer.parseInt(Integer.java:580)
-	at java.lang.Integer.parseInt(Integer.java:615)
-	at com.mycompany.parcinghtml.ParsingMatch.parseMatch(ParsingMatch.java:123)
-	at com.mycompany.parcinghtml.ParsingAllMatches.parsingMatches(ParsingAllMatches.java:45)
-	at com.mycompany.parcinghtml.Main.main(Main.java:41)
-

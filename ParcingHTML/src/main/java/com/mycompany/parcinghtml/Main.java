@@ -25,14 +25,10 @@ public class Main {
                 .setType(DERBY)
                 .addScript("classpath:SQLscript.sql")
                 .build();
-    }
-    
- 
+    } 
     
     public static void main(String[] args) throws SQLException, IOException{
-        DataSource primaryDS = dataSource();
-        
-        
+        DataSource primaryDS = dataSource();       
         
         ParsingClassPlayers psp = new ParsingClassPlayers(primaryDS);
         psp.downloadSource();

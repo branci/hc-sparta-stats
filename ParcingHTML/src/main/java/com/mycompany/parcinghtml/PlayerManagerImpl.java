@@ -74,11 +74,9 @@ public class PlayerManagerImpl implements PlayerManager {
             return executeQueryForMultiplePlayers(st);
         } catch (SQLException ex) {
             throw new RuntimeException("Error when getting players from database", ex);
-        } finally {
-            DBUtils.closeQuietly(conn, st);
-        }             
+                    
+        }
     }
-    
     private static Player rowToPlayerInfo(ResultSet rs) throws SQLException {
         Player result = new Player();
         result.setId(rs.getInt("PLAYERID"));
@@ -111,9 +109,7 @@ public class PlayerManagerImpl implements PlayerManager {
             String msg = "Error when getting player with id = " + id + " from DB";
             logger.log(Level.SEVERE, msg, ex);
             throw new RuntimeException(msg, ex);
-        } finally {
-            DBUtils.closeQuietly(conn, st);
-        }                
+        }               
     }
    
     static Player executeQueryForSinglePlayer(PreparedStatement st) throws SQLException, RuntimeException {
