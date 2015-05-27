@@ -36,7 +36,7 @@ public class DatabaseManager {
         FileHandler fh;
         log.setUseParentHandlers(false);
         try {
-            fh = new FileHandler("/home/kristian/Downloads/ParcingHTML/Logger.log");
+            fh = new FileHandler("Database_logger.log");
             log.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);

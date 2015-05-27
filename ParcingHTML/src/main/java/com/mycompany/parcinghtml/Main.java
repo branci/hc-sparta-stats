@@ -38,7 +38,7 @@ public class Main {
         psp.downloadSource();
         
         IdioticParsing idioticPars = new IdioticParsing(primaryDS);
-        idioticPars.someParsing(2010,2014);
+        idioticPars.someParsing(2010,2010);
    
     }
    

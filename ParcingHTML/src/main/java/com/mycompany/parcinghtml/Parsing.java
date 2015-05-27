@@ -15,10 +15,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import org.jsoup.nodes.Element;
 
 /**
- *
+ *Class for parsing html sites
  * @author kristian
  */
 public class Parsing {
@@ -26,9 +30,23 @@ public class Parsing {
     private int goalID = 1;
     private int assistID = 1;
     private ArrayList<String> playerNames;
+    final static Logger log = Logger.getLogger(DatabaseManager.class.getName());
             
     public Parsing(DatabaseManager db){
         this.db = db;
+        configureLogger();
+    }
+    private void configureLogger(){
+        FileHandler fh;
+        log.setUseParentHandlers(false);
+        try {
+            fh = new FileHandler("Parser_logger.log");
+            log.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+        } catch (SecurityException | IOException e) {
+            System.out.println("Handler failed");
+        }
     }
     
     public ArrayList<String> getAllNames(Document doc)
@@ -37,91 +55,124 @@ public class Parsing {
         Elements statsTable = doc.getElementById("tab_box_1").child(0).child(0).children();
         for (Element player: statsTable)
         {   
-            //System.out.println(player.child(0).text());
             String [] names = player.child(0).text().split(" ");
             if (names.length != 2) continue;
             apn.add(player.child(0).text());
         }
-        return apn;       
+        return apn;
     }
-    
-    public void parseDate(String date,Match match){
+
+    public void parseDate(String date, Match match) {
         String[] array = date.split(",");
-        
+
         array = array[1].split(" ");
-        
+
         array = array[2].split("\\.");
-        java.sql.Date finalDate =  java.sql.Date.valueOf(array[2].substring(0, 4) + "-" + array[1] + "-" + array[0]); 
+        java.sql.Date finalDate = java.sql.Date.valueOf(array[2].substring(0, 4) + "-" + array[1] + "-" + array[0]);
         match.setDate(finalDate);
     }
-    
-    public void parseMatch(String url, Match match) throws IOException, SQLException{
+
+    public void parseMatch(String url, Match match) throws IOException, SQLException {
 
         Document doc = Jsoup.connect(url).get();
         Elements gameDate = doc.select("div.game_date > span");
         //Ziskanie datumu zapasu
         parseDate(gameDate.get(0).text(), match);
         playerNames = getAllNames(doc);
-        
+
         Elements teams = doc.select("div.game_box");
-        String gameDetails = doc.select("div.game_details").get(0).text();
-        
+        Element gameDetailsElement = doc.select("div.game_details").get(0);
+        String gameDetails = gameDetailsElement.text();
+
         //Rozhoduje sa, ktore elementy sa budu parsovat pre koho. Dovod: Dva typy html, ked Sparta je doma, a ked je host 
-        if (teams.get(0).text().contains("Sparta")) {
-            //Ziskanie pocet golov Sparty a supisku zapasu
-            parseSparta(teams.get(0), match);
-            //Ziskanie pocet golov protihraca a nazov protihraca
-            parseOpponent(teams.get(1), match);
-            match.setHome("domaci");
-            //Ziskanie poctu trestnych minut 
-            match.setSpartaPenalty(Integer.parseInt(gameDetails.substring(gameDetails.indexOf("Vyloučení: ") + "Vyloučení: ".length(), gameDetails.indexOf(":",gameDetails.indexOf("Vyloučení: ") + "Vyloučení: ".length())).replace(" ", "")));
-            match.setOpponentPenalty(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(":",gameDetails.indexOf("Vyloučení: ") + "Vyloučení: ".length()) + 1, gameDetails.indexOf(":",gameDetails.indexOf("Vyloučení: ") + "Vyloučení: ".length()) + 3).replace(",","").replace(".", "").replace(" ","")));
-            //Ziskanie poctu striel
-            match.setSpartaShots(Integer.parseInt(gameDetails.substring(gameDetails.indexOf("Střely na branku: ") + "Střely na branku: ".length(), gameDetails.indexOf(":",gameDetails.indexOf("Střely na branku: ") + "Střely na branku: ".length()))));
-            match.setOpponentShots(Integer.parseInt(gameDetails.substring( gameDetails.indexOf(":",gameDetails.indexOf("Střely na branku: ") + "Střely na branku: ".length()) + 1,  gameDetails.indexOf(" ", gameDetails.indexOf("Střely na branku: ") + "Střely na branku: ".length())).replace(".", "")));
-            //Ziskanie najlepsieho hraca zapasu
-            if(gameDetails.contains("Nejlepší hráči zápasu: "))
-                match.setBestPlayer(gameDetails.substring(gameDetails.indexOf("Nejlepší hráči zápasu: ") + "Nejlepší hráči zápasu: ".length(), gameDetails.indexOf("-", gameDetails.indexOf("Nejlepší hráči zápasu: ") + "Nejlepší hráči zápasu: ".length())).replace(" ", ""));
-            if(gameDetails.contains("Nejlepší hráči utkání: "))
-                match.setBestPlayer(gameDetails.substring(gameDetails.indexOf("Nejlepší hráči utkání: ") + "Nejlepší hráči utkání: ".length(), gameDetails.indexOf("-", gameDetails.indexOf("Nejlepší hráči utkání: ") + "Nejlepší hráči utkání: ".length())).replace(" ", ""));
-            if(gameDetails.contains("Nejlepší hráč utkání: "))
-                match.setBestPlayer(gameDetails.substring(gameDetails.indexOf("Nejlepší hráč utkání: ") + "Nejlepší hráč utkání: ".length(), gameDetails.indexOf("-", gameDetails.indexOf("Nejlepší hráč utkání: ") + "Nejlepší hráč utkání: ".length())).replace(" ", ""));
-        } else {
-            parseSparta(teams.get(1), match);
-            parseOpponent(teams.get(0), match);
-            match.setHome("hostia");
-            
-            match.setOpponentPenalty(Integer.parseInt(gameDetails.substring(gameDetails.indexOf("Vyloučení: ") + "Vyloučení: ".length(), gameDetails.indexOf(":",gameDetails.indexOf("Vyloučení: ") + "Vyloučení: ".length()))));
-            match.setSpartaPenalty(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(":",gameDetails.indexOf("Vyloučení: ") + "Vyloučení: ".length()) + 1, gameDetails.indexOf(":",gameDetails.indexOf("Vyloučení: ") + "Vyloučení: ".length()) + 3).replace(",","").replace(".", "")));
-            
-            match.setOpponentShots(Integer.parseInt(gameDetails.substring(gameDetails.indexOf("Střely na branku: ") + "Střely na branku: ".length(), gameDetails.indexOf(":",gameDetails.indexOf("Střely na branku: ") + "Střely na branku: ".length())).replace(" ", "")));
-            match.setSpartaShots(Integer.parseInt(gameDetails.substring( gameDetails.indexOf(":",gameDetails.indexOf("Střely na branku: ") + "Střely na branku: ".length()) + 1,  gameDetails.indexOf(" ", gameDetails.indexOf("Střely na branku: ") + "Střely na branku: ".length())).replace(".", "").replace(" ", "")));
-            
-            if(gameDetails.contains("Nejlepší hráči zápasu: "))
-                match.setBestPlayer(gameDetails.substring(gameDetails.indexOf("-", gameDetails.indexOf("Nejlepší hráči zápasu: ") + "Nejlepší hráči zápasu: ".length()) + 1).replace(" ", "").replace(".",""));
-            if(gameDetails.contains("Nejlepší hráči utkání: "))
-                match.setBestPlayer(gameDetails.substring(gameDetails.indexOf("-", gameDetails.indexOf("Nejlepší hráči utkání: ") + "Nejlepší hráči utkání: ".length()) + 1).replace(" ", "").replace(".",""));
-            if(gameDetails.contains("Nejlepší hráč utkání: "))
-               match.setBestPlayer(gameDetails.substring(gameDetails.indexOf("-", gameDetails.indexOf("Nejlepší hráč utkání: ") + "Nejlepší hráč utkání: ".length()) + 1).replace(" ", "").replace(".",""));
+        String bestPlayerElementText = null;
+        String shotsElementText = null;
+        String goalsElementText = null;
+        String refereeElementText = null;
+        //Podmienka pre bestPlayera, od roku v 2013 sa neuvadza na strankach
+        try {
+            if (gameDetailsElement.getAllElements().size() > 9) {
+                if (gameDetailsElement.getAllElements().get(9).text().matches("[a-zA-Z]+")) {
+                    bestPlayerElementText = gameDetailsElement.getAllElements().get(9).text();
+                }
+            }
+
+            String penaltyElementText = gameDetailsElement.getAllElements().get(3).text();
+            if (gameDetailsElement.getAllElements().size() > 7) {
+                shotsElementText = gameDetailsElement.getAllElements().get(7).text();
+            }
+            goalsElementText = gameDetailsElement.getAllElements().get(1).text();
+            refereeElementText = gameDetailsElement.getAllElements().get(2).text();
+
+            if (teams.get(0).text().contains("Sparta")) {
+                //Ziskanie pocet golov Sparty a supisku zapasu
+                parseSparta(teams.get(0), match);
+                //Ziskanie pocet golov protihraca a nazov protihraca
+                parseOpponent(teams.get(1), match);
+                match.setHome("domaci");
+                //Ziskanie poctu trestnych minut 
+                match.setSpartaPenalty(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(penaltyElementText) + penaltyElementText.length(), gameDetails.indexOf(":", gameDetails.indexOf(penaltyElementText) + penaltyElementText.length())).replace(" ", "")));
+                match.setOpponentPenalty(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(":", gameDetails.indexOf(penaltyElementText) + penaltyElementText.length()) + 1, gameDetails.indexOf(":", gameDetails.indexOf(penaltyElementText) + penaltyElementText.length()) + 3).replace(",", "").replace(".", "").replace(" ", "")));
+                //Ziskanie poctu striel
+                if (gameDetailsElement.getAllElements().size() > 7) {
+                    match.setSpartaShots(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(shotsElementText) + shotsElementText.length(), gameDetails.indexOf(":", gameDetails.indexOf(shotsElementText) + shotsElementText.length())).replace(" ", "")));
+                    match.setOpponentShots(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(":", gameDetails.indexOf(shotsElementText) + shotsElementText.length()) + 1, gameDetails.indexOf(".", gameDetails.indexOf(shotsElementText) + shotsElementText.length())).replace(" ", "")));
+                }
+                //Ziskanie najlepsieho hraca zapasu
+                if (gameDetailsElement.getAllElements().size() > 9) {
+                    if (gameDetailsElement.getAllElements().get(9).text().matches("[a-zA-Z]+")) {
+                        if (gameDetails.substring(gameDetails.indexOf(bestPlayerElementText)).contains("-")) {
+                            match.setBestPlayer(gameDetails.substring(gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length(), gameDetails.indexOf("-", gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length())).replace(" ", ""));
+                        } else {
+                            match.setBestPlayer(gameDetails.substring(gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length(), gameDetails.indexOf("–", gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length())).replace(" ", ""));
+                        }
+                    }
+                }
+            } else {
+                parseSparta(teams.get(1), match);
+                parseOpponent(teams.get(0), match);
+                match.setHome("hostia");
+
+                match.setOpponentPenalty(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(penaltyElementText) + penaltyElementText.length(), gameDetails.indexOf(":", gameDetails.indexOf(penaltyElementText) + penaltyElementText.length())).replace(" ", "")));
+                match.setSpartaPenalty(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(":", gameDetails.indexOf(penaltyElementText) + penaltyElementText.length()) + 1, gameDetails.indexOf(":", gameDetails.indexOf(penaltyElementText) + penaltyElementText.length()) + 3).replace(",", "").replace(".", "").replace(" ", "")));
+                if (gameDetailsElement.getAllElements().size() > 7) {
+                    match.setOpponentShots(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(shotsElementText) + shotsElementText.length(), gameDetails.indexOf(":", gameDetails.indexOf(shotsElementText) + shotsElementText.length())).replace(" ", "")));
+                    match.setSpartaShots(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(":", gameDetails.indexOf(shotsElementText) + shotsElementText.length()) + 1, gameDetails.indexOf(".", gameDetails.indexOf(shotsElementText) + shotsElementText.length())).replace(" ", "")));
+                }
+                if (gameDetailsElement.getAllElements().size() > 9) {
+                    if (gameDetailsElement.getAllElements().get(9).text().matches("[a-zA-Z]+")) {
+                        if (gameDetails.substring(gameDetails.indexOf(bestPlayerElementText)).contains("-")) {
+                            match.setBestPlayer(gameDetails.substring(gameDetails.indexOf("-", gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length()) + 1).replace(" ", "").replace(".", "").replace(" ", ""));
+                        } else {
+                            match.setBestPlayer(gameDetails.substring(gameDetails.indexOf("–", gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length()) + 1).replace(" ", "").replace(".", "").replace(" ", ""));
+                        }
+                    }
+                }
+            }
+            db.addMatch(match);
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Parsing failed for match with id: " + match.toString(), e);
+            return;
         }
-        db.addMatch(match);
         System.out.println(match);
-        if(match.getSpartaGoals() != 0)
-           parseGoals(gameDetails.substring(gameDetails.indexOf("Branky a nahrávky: ") + "Branky a nahrávky: ".length(), gameDetails.indexOf("Rozhodčí:") - 2), match);
+        if (match.getSpartaGoals() != 0) {
+            parseGoals(gameDetails.substring(gameDetails.indexOf(goalsElementText) + goalsElementText.length(), gameDetails.indexOf(refereeElementText) - 2), match);
+        }
     }
-    
-    
-    private int getIdOfPlayer(String name)
-    {
+
+    private int getIdOfPlayer(String name) {
         int playerID = 0;
         String fullName = "";
         String sql_find_player = "SELECT PLAYERID FROM PLAYERS WHERE (PLAYERS.NAME || '') LIKE ?";
 
-        for (String pname: playerNames)
-        {
-            if (pname.contains(name)) fullName=pname; 
+        for (String pname : playerNames) {
+            if (pname.contains(name)) {
+                fullName = pname;
+            }
         }
-        if (fullName.equals("")) return playerID;
+        if (fullName.equals("")) {
+            return playerID;
+        }
         try (Connection conn = db.getDataSource().getConnection())
         {
             try (PreparedStatement ps = conn.prepareStatement(sql_find_player))
@@ -175,7 +226,6 @@ public class Parsing {
             }
             if(part.contains(".") && part.length() == 2){
                 tmp = " " + part;
-                //System.out.println("CAST: "+ tmp);
                 continue;
             }
                 
@@ -189,7 +239,6 @@ public class Parsing {
                 assist.setPlayerID(getIdOfPlayer(assist.getPlayer()));
                 db.addAssist(assist);
                 if(assist.getPlayerID() == 0) System.out.println(assist);
-                //System.out.println(assist);
                 assistID++;
                 continue;
             }
@@ -199,7 +248,6 @@ public class Parsing {
             goal.setPlayerID(getIdOfPlayer(goal.getPlayer()));
             db.addGoal(goal);
             if(goal.getPlayerID() == 0) System.out.println(goal);
-             //System.out.println(goal);
             tmp = "";
         }
     }
@@ -216,8 +264,11 @@ public class Parsing {
         
         int goals = Integer.parseInt(sparta.child(1).text());
         match.setSpartaGoals(goals);
-        System.out.println(sparta.child(2).text().indexOf("Trenér:") - 1);
-        parsePlayers(sparta.child(2).text().substring(sparta.child(2).text().indexOf(":") + 1, sparta.child(2).text().indexOf("Trenér") - 1),match.getId());
+        //Osetruje pripady kedy sa v html pri parsovani supisky nevyskutuje aj trener
+        if(sparta.child(2).text().contains("Trené"))
+            parsePlayers(sparta.child(2).text().substring(sparta.child(2).text().indexOf(":") + 1, sparta.child(2).text().indexOf("Trené") - 1),match.getId());
+        else 
+            parsePlayers(sparta.child(2).text().substring(sparta.child(2).text().indexOf(":") + 1), match.getId());
     }
     
     public void parsePlayers(String text, int id) throws SQLException{

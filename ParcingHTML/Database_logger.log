@@ -1,0 +1,76 @@
+May 27, 2015 8:19:59 PM com.mycompany.parcinghtml.Parsing parseMatch
+SEVERE: Parsing failed for match with id: Match{id=22, date=2009-11-01, opponent=Třinec, spartaGoals=6, opponentGoals=3, spartaShots=0, opponentShots=8, spartaPenalty=9, opponentPenalty=8, home=hostia, bestPlayer=null, season=2010}
+java.lang.NumberFormatException: For input string: "9,navícLanghammer(Sparta)10minut"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.parseInt(Integer.java:615)
+	at com.mycompany.parcinghtml.Parsing.parseMatch(Parsing.java:140)
+	at com.mycompany.parcinghtml.IdioticParsing.someParsing(IdioticParsing.java:44)
+	at com.mycompany.parcinghtml.Main.main(Main.java:41)
+
+May 27, 2015 8:20:03 PM com.mycompany.parcinghtml.Parsing parseMatch
+SEVERE: Parsing failed for match with id: Match{id=27, date=2009-11-24, opponent=Vítkovice, spartaGoals=1, opponentGoals=2, spartaShots=0, opponentShots=0, spartaPenalty=0, opponentPenalty=0, home=hostia, bestPlayer=null, season=2010}
+java.lang.StringIndexOutOfBoundsException: String index out of range: -170
+	at java.lang.String.substring(String.java:1954)
+	at com.mycompany.parcinghtml.Parsing.parseMatch(Parsing.java:136)
+	at com.mycompany.parcinghtml.IdioticParsing.someParsing(IdioticParsing.java:44)
+	at com.mycompany.parcinghtml.Main.main(Main.java:41)
+
+May 27, 2015 8:20:15 PM com.mycompany.parcinghtml.Parsing parseMatch
+SEVERE: Parsing failed for match with id: Match{id=43, date=2010-01-21, opponent=Slavia, spartaGoals=4, opponentGoals=1, spartaShots=1, opponentShots=0, spartaPenalty=2, opponentPenalty=5, home=domaci, bestPlayer=null, season=2010}
+java.lang.NumberFormatException: For input string: "0,0:1,2:1,3:1,4:1"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.parseInt(Integer.java:615)
+	at com.mycompany.parcinghtml.Parsing.parseMatch(Parsing.java:119)
+	at com.mycompany.parcinghtml.IdioticParsing.someParsing(IdioticParsing.java:44)
+	at com.mycompany.parcinghtml.Main.main(Main.java:41)
+
+May 27, 2015 8:20:16 PM com.mycompany.parcinghtml.Parsing parseMatch
+SEVERE: Parsing failed for match with id: Match{id=44, date=2010-01-24, opponent=Liberec, spartaGoals=2, opponentGoals=1, spartaShots=1, opponentShots=0, spartaPenalty=4, opponentPenalty=4, home=domaci, bestPlayer=null, season=2010}
+java.lang.NumberFormatException: For input string: "0,2:0,2:1"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.parseInt(Integer.java:615)
+	at com.mycompany.parcinghtml.Parsing.parseMatch(Parsing.java:119)
+	at com.mycompany.parcinghtml.IdioticParsing.someParsing(IdioticParsing.java:44)
+	at com.mycompany.parcinghtml.Main.main(Main.java:41)
+
+May 27, 2015 8:20:20 PM com.mycompany.parcinghtml.Parsing parseMatch
+SEVERE: Parsing failed for match with id: Match{id=47, date=2010-02-02, opponent=K. Vary, spartaGoals=5, opponentGoals=2, spartaShots=0, opponentShots=0, spartaPenalty=8, opponentPenalty=8, home=hostia, bestPlayer=null, season=2010}
+java.lang.NumberFormatException: For input string: "1,0:2,0:3,0:4,1:4,1:5,2:5"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.parseInt(Integer.java:615)
+	at com.mycompany.parcinghtml.Parsing.parseMatch(Parsing.java:140)
+	at com.mycompany.parcinghtml.IdioticParsing.someParsing(IdioticParsing.java:44)
+	at com.mycompany.parcinghtml.Main.main(Main.java:41)
+
+May 27, 2015 8:20:23 PM com.mycompany.parcinghtml.Parsing parseMatch
+SEVERE: Parsing failed for match with id: Match{id=51, date=2010-03-03, opponent=Budějovice, spartaGoals=4, opponentGoals=1, spartaShots=0, opponentShots=0, spartaPenalty=5, opponentPenalty=6, home=domaci, bestPlayer=null, season=2010}
+java.lang.StringIndexOutOfBoundsException: String index out of range: -232
+	at java.lang.String.substring(String.java:1954)
+	at com.mycompany.parcinghtml.Parsing.parseMatch(Parsing.java:118)
+	at com.mycompany.parcinghtml.IdioticParsing.someParsing(IdioticParsing.java:44)
+	at com.mycompany.parcinghtml.Main.main(Main.java:41)
+
+May 27, 2015 8:20:24 PM com.mycompany.parcinghtml.Parsing parseMatch
+SEVERE: Parsing failed for match with id: Match{id=53, date=2010-03-16, opponent=Vítkovice, spartaGoals=1, opponentGoals=4, spartaShots=0, opponentShots=1, spartaPenalty=6, opponentPenalty=7, home=hostia, bestPlayer=null, season=2010}
+java.lang.NumberFormatException: For input string: "0,2:0,2:1,3:1,4:1"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.parseInt(Integer.java:615)
+	at com.mycompany.parcinghtml.Parsing.parseMatch(Parsing.java:140)
+	at com.mycompany.parcinghtml.IdioticParsing.someParsing(IdioticParsing.java:44)
+	at com.mycompany.parcinghtml.Main.main(Main.java:41)
+
+May 27, 2015 8:20:25 PM com.mycompany.parcinghtml.Parsing parseMatch
+SEVERE: Parsing failed for match with id: Match{id=54, date=2010-03-17, opponent=Vítkovice, spartaGoals=2, opponentGoals=0, spartaShots=0, opponentShots=0, spartaPenalty=7, opponentPenalty=4, home=hostia, bestPlayer=null, season=2010}
+java.lang.NumberFormatException: For input string: "1,0:2"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.parseInt(Integer.java:615)
+	at com.mycompany.parcinghtml.Parsing.parseMatch(Parsing.java:140)
+	at com.mycompany.parcinghtml.IdioticParsing.someParsing(IdioticParsing.java:44)
+	at com.mycompany.parcinghtml.Main.main(Main.java:41)
+
