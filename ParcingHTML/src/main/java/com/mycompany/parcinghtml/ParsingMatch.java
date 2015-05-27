@@ -25,22 +25,26 @@ import org.jsoup.nodes.Element;
  *Class for parsing html sites
  * @author kristian
  */
-public class Parsing {
+public class ParsingMatch {
+    
     private final DatabaseManager db;
     private int goalID = 1;
     private int assistID = 1;
     private ArrayList<String> playerNames;
-    final static Logger log = Logger.getLogger(DatabaseManager.class.getName());
-            
-    public Parsing(DatabaseManager db){
+    final static Logger logMatch = Logger.getLogger(DatabaseManager.class.getName());
+    final static Logger logPlayer = Logger.getLogger(DatabaseManager.class.getName());
+    
+    public ParsingMatch(DatabaseManager db){
         this.db = db;
-        configureLogger();
+        configureLogger(logMatch,"Parser_match_logger.log");
+        configureLogger(logPlayer, "Parser_player_logger.log");
     }
-    private void configureLogger(){
+    //Nastavenie loggera
+    private void configureLogger(Logger log, String nameOfFile){
         FileHandler fh;
         log.setUseParentHandlers(false);
         try {
-            fh = new FileHandler("Parser_logger.log");
+            fh = new FileHandler(nameOfFile);
             log.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
@@ -71,7 +75,7 @@ public class Parsing {
         java.sql.Date finalDate = java.sql.Date.valueOf(array[2].substring(0, 4) + "-" + array[1] + "-" + array[0]);
         match.setDate(finalDate);
     }
-
+    //Hlavna parsovacia metoda
     public void parseMatch(String url, Match match) throws IOException, SQLException {
 
         Document doc = Jsoup.connect(url).get();
@@ -113,7 +117,7 @@ public class Parsing {
                 //Ziskanie poctu trestnych minut 
                 match.setSpartaPenalty(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(penaltyElementText) + penaltyElementText.length(), gameDetails.indexOf(":", gameDetails.indexOf(penaltyElementText) + penaltyElementText.length())).replace(" ", "")));
                 match.setOpponentPenalty(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(":", gameDetails.indexOf(penaltyElementText) + penaltyElementText.length()) + 1, gameDetails.indexOf(":", gameDetails.indexOf(penaltyElementText) + penaltyElementText.length()) + 3).replace(",", "").replace(".", "").replace(" ", "")));
-                //Ziskanie poctu striel
+                //Ziskanie poctu striel a osetrenie pokial element chyba
                 if (gameDetailsElement.getAllElements().size() > 7) {
                     match.setSpartaShots(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(shotsElementText) + shotsElementText.length(), gameDetails.indexOf(":", gameDetails.indexOf(shotsElementText) + shotsElementText.length())).replace(" ", "")));
                     match.setOpponentShots(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(":", gameDetails.indexOf(shotsElementText) + shotsElementText.length()) + 1, gameDetails.indexOf(".", gameDetails.indexOf(shotsElementText) + shotsElementText.length())).replace(" ", "")));
@@ -151,7 +155,7 @@ public class Parsing {
             }
             db.addMatch(match);
         } catch (Exception e) {
-            log.log(Level.SEVERE, "Parsing failed for match with id: " + match.toString(), e);
+            logMatch.log(Level.SEVERE, "Parsing failed for match with id: " + match.toString(), e);
             return;
         }
         System.out.println(match);
@@ -238,7 +242,7 @@ public class Parsing {
                 tmp = ""; 
                 assist.setPlayerID(getIdOfPlayer(assist.getPlayer()));
                 db.addAssist(assist);
-                if(assist.getPlayerID() == 0) System.out.println(assist);
+                if(assist.getPlayerID() == 0) logPlayer.log(Level.SEVERE, "Player wasnt found in db: " + assist.toString());
                 assistID++;
                 continue;
             }
@@ -247,7 +251,7 @@ public class Parsing {
             goal.setPlayer(part.replace(",", "") + tmp);
             goal.setPlayerID(getIdOfPlayer(goal.getPlayer()));
             db.addGoal(goal);
-            if(goal.getPlayerID() == 0) System.out.println(goal);
+            if(goal.getPlayerID() == 0) logPlayer.log(Level.SEVERE, "Player wasnt found in db: " + assist.toString());
             tmp = "";
         }
     }

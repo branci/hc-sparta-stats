@@ -18,6 +18,7 @@ import javax.sql.DataSource;
 /*
  * @author kristian
  */
+//Trieda sluzi na ukladanie dat do databazy
 public class DatabaseManager {
     
     private final DataSource dataSource;

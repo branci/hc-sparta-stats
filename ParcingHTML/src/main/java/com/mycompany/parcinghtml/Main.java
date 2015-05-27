@@ -37,8 +37,8 @@ public class Main {
         ParsingClassPlayers psp = new ParsingClassPlayers(primaryDS);
         psp.downloadSource();
         
-        IdioticParsing idioticPars = new IdioticParsing(primaryDS);
-        idioticPars.someParsing(2010,2010);
+        ParsingAllMatches parsing = new ParsingAllMatches(primaryDS);
+        parsing.parsingMatches(2015,2015);
    
     }
    

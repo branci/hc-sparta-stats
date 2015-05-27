@@ -17,19 +17,20 @@ import org.jsoup.select.Elements;
  *
  * @author simon
  */
-public class IdioticParsing {
+public class ParsingAllMatches {
     
     private DataSource dataSource;
     
-    public IdioticParsing(DataSource dataSource)
+    public ParsingAllMatches(DataSource dataSource)
     {
         this.dataSource = dataSource;
     }
-    
-    public void someParsing(int firstSeason, int lastSeason) throws IOException, SQLException {
+    //Metoda prechadza  zapasy pomocou odkazov na podrobnejsie udaje
+    //Parametre bere sezony, ktore sa maju prehladat 
+    public void parsingMatches(int firstSeason, int lastSeason) throws IOException, SQLException {
         int matchID = 1;
         DatabaseManager db = new DatabaseManager(dataSource);
-        Parsing parse = new Parsing(db);
+        ParsingMatch parse = new ParsingMatch(db);
         ParsingPlayerStats pps = new ParsingPlayerStats(dataSource);
         for (int i = lastSeason; i >= firstSeason; i--) {
 
