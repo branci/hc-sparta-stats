@@ -32,10 +32,7 @@ public class ParsingClassPlayers {
     {
         ds = dataSource;
     }
-   
-    
-    
-           
+      
     public void downloadSource() throws SQLException {
         //ds = prepareDataSource();
         String sql = "INSERT INTO PLAYERS(NAME,AGE,HEIGHT,WEIGHT,PLAYERNUM,POSITION,PLAYERID) VALUES(?,?,?,?,?,?,?)";
@@ -77,15 +74,13 @@ public class ParsingClassPlayers {
                         
                         try (PreparedStatement st = conn.prepareStatement(sql))
                         {
-                            //System.out.println(item.child(2).text());
                             st.setString(1, item.child(2).text());
                             String[] age = item.child(4).text().split(" ");
                             st.setInt(2, Integer.parseInt(age[0]));
                             String[] height = item.child(5).text().split(" ");
                             st.setInt(3, Integer.parseInt(height[0]));
                             String[] weight = item.child(6).text().split(" ");
-                            st.setInt(4, Integer.parseInt(weight[0]));
-                            
+                            st.setInt(4, Integer.parseInt(weight[0]));                           
                                       
                             try
                             {

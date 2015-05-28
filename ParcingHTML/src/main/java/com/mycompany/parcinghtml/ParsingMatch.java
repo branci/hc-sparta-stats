@@ -68,7 +68,8 @@ public class ParsingMatch {
 
     public void parseDate(String date, Match match) {
         String[] array = date.split(",");
-
+        System.out.println(array[0]);
+        if(array[0].matches(".[a-zA-Z].")) match.setPlayoff("playoff");
         array = array[1].split(" ");
 
         array = array[2].split("\\.");
@@ -95,11 +96,10 @@ public class ParsingMatch {
         String refereeElementText = null;
         //Podmienka pre bestPlayera, od roku v 2013 sa neuvadza na strankach
         try {
-            if (gameDetailsElement.getAllElements().size() > 9) {
-                if (gameDetailsElement.getAllElements().get(9).text().matches("[a-zA-Z]+")) {
+            if (match.getSeason() >= 2014) {
                     bestPlayerElementText = gameDetailsElement.getAllElements().get(9).text();
                 }
-            }
+            
 
             String penaltyElementText = gameDetailsElement.getAllElements().get(3).text();
             if (gameDetailsElement.getAllElements().size() > 7) {
@@ -123,15 +123,14 @@ public class ParsingMatch {
                     match.setOpponentShots(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(":", gameDetails.indexOf(shotsElementText) + shotsElementText.length()) + 1, gameDetails.indexOf(".", gameDetails.indexOf(shotsElementText) + shotsElementText.length())).replace(" ", "")));
                 }
                 //Ziskanie najlepsieho hraca zapasu
-                if (gameDetailsElement.getAllElements().size() > 9) {
-                    if (gameDetailsElement.getAllElements().get(9).text().matches("[a-zA-Z]+")) {
+                if (match.getSeason() >= 2014) {
                         if (gameDetails.substring(gameDetails.indexOf(bestPlayerElementText)).contains("-")) {
                             match.setBestPlayer(gameDetails.substring(gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length(), gameDetails.indexOf("-", gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length())).replace(" ", ""));
                         } else {
                             match.setBestPlayer(gameDetails.substring(gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length(), gameDetails.indexOf("–", gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length())).replace(" ", ""));
-                        }
-                    }
-                }
+                          }
+               }
+                
             } else {
                 parseSparta(teams.get(1), match);
                 parseOpponent(teams.get(0), match);
@@ -143,15 +142,13 @@ public class ParsingMatch {
                     match.setOpponentShots(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(shotsElementText) + shotsElementText.length(), gameDetails.indexOf(":", gameDetails.indexOf(shotsElementText) + shotsElementText.length())).replace(" ", "")));
                     match.setSpartaShots(Integer.parseInt(gameDetails.substring(gameDetails.indexOf(":", gameDetails.indexOf(shotsElementText) + shotsElementText.length()) + 1, gameDetails.indexOf(".", gameDetails.indexOf(shotsElementText) + shotsElementText.length())).replace(" ", "")));
                 }
-                if (gameDetailsElement.getAllElements().size() > 9) {
-                    if (gameDetailsElement.getAllElements().get(9).text().matches("[a-zA-Z]+")) {
+                if (match.getSeason() >= 2014) {
                         if (gameDetails.substring(gameDetails.indexOf(bestPlayerElementText)).contains("-")) {
-                            match.setBestPlayer(gameDetails.substring(gameDetails.indexOf("-", gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length()) + 1).replace(" ", "").replace(".", "").replace(" ", ""));
+                            match.setBestPlayer(gameDetails.substring(gameDetails.indexOf("-", gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length()) + 1,gameDetails.indexOf(".", gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length()) + 1).replace(" ", "").replace(".", "").replace(" ", ""));
                         } else {
-                            match.setBestPlayer(gameDetails.substring(gameDetails.indexOf("–", gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length()) + 1).replace(" ", "").replace(".", "").replace(" ", ""));
+                            match.setBestPlayer(gameDetails.substring(gameDetails.indexOf("–", gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length()) + 1,gameDetails.indexOf(".", gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length()) + 1).replace(" ", "").replace(".", "").replace(" ", ""));
                         }
-                    }
-                }
+                }                
             }
             db.addMatch(match);
         } catch (Exception e) {
@@ -239,10 +236,12 @@ public class ParsingMatch {
                 assist.setGoal(goal.getId());
                 assist.setMatch(match.getId());
                 assist.setPlayer(part.replace(")", "").replace(",","").replace("(", "") + tmp);
-                tmp = ""; 
+                tmp = "";
+                if(assist.getPlayer().length() <= 2 ) continue;
                 assist.setPlayerID(getIdOfPlayer(assist.getPlayer()));
                 db.addAssist(assist);
                 if(assist.getPlayerID() == 0) logPlayer.log(Level.SEVERE, "Player wasnt found in db: " + assist.toString());
+                ///System.out.println(assist);
                 assistID++;
                 continue;
             }
@@ -251,7 +250,8 @@ public class ParsingMatch {
             goal.setPlayer(part.replace(",", "") + tmp);
             goal.setPlayerID(getIdOfPlayer(goal.getPlayer()));
             db.addGoal(goal);
-            if(goal.getPlayerID() == 0) logPlayer.log(Level.SEVERE, "Player wasnt found in db: " + assist.toString());
+            //System.out.println(goal);
+            if(goal.getPlayerID() == 0) logPlayer.log(Level.SEVERE, "Player wasnt found in db: " + goal.toString());
             tmp = "";
         }
     }

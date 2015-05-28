@@ -34,7 +34,7 @@ public class Main {
         psp.downloadSource();
         
         ParsingAllMatches parsing = new ParsingAllMatches(primaryDS);
-        parsing.parsingMatches(2015,2015);
+        parsing.parsingMatches(2010,2015);
    
     }
    

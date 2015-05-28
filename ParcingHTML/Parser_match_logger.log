@@ -1,2 +1,115 @@
-May 27, 2015 11:49:13 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+May 28, 2015 9:23:33 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
 SEVERE: Player wasnt found in db: Assist{id=30, match=6, player=RéwayPolášek, goal=21, playerID=0}
+May 28, 2015 9:23:41 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
+SEVERE: Parsing failed for match with id: Match{id=17, date=2014-10-31, opponent=null, spartaGoals=0, opponentGoals=0, spartaShots=0, opponentShots=0, spartaPenalty=0, opponentPenalty=0, home=null, bestPlayer=null, playoff=null, season=2015}
+java.lang.IndexOutOfBoundsException: Index: 9, Size: 9
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at com.mycompany.parcinghtml.ParsingMatch.parseMatch(ParsingMatch.java:100)
+	at com.mycompany.parcinghtml.ParsingAllMatches.parsingMatches(ParsingAllMatches.java:45)
+	at com.mycompany.parcinghtml.Main.main(Main.java:37)
+
+May 28, 2015 9:23:42 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
+SEVERE: Parsing failed for match with id: Match{id=20, date=2014-11-16, opponent=null, spartaGoals=0, opponentGoals=0, spartaShots=0, opponentShots=0, spartaPenalty=0, opponentPenalty=0, home=null, bestPlayer=null, playoff=null, season=2015}
+java.lang.IndexOutOfBoundsException: Index: 9, Size: 9
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at com.mycompany.parcinghtml.ParsingMatch.parseMatch(ParsingMatch.java:100)
+	at com.mycompany.parcinghtml.ParsingAllMatches.parsingMatches(ParsingAllMatches.java:45)
+	at com.mycompany.parcinghtml.Main.main(Main.java:37)
+
+May 28, 2015 9:23:52 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
+SEVERE: Parsing failed for match with id: Match{id=35, date=2015-01-06, opponent=null, spartaGoals=0, opponentGoals=0, spartaShots=0, opponentShots=0, spartaPenalty=0, opponentPenalty=0, home=null, bestPlayer=null, playoff=null, season=2015}
+java.lang.IndexOutOfBoundsException: Index: 9, Size: 9
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at com.mycompany.parcinghtml.ParsingMatch.parseMatch(ParsingMatch.java:100)
+	at com.mycompany.parcinghtml.ParsingAllMatches.parsingMatches(ParsingAllMatches.java:45)
+	at com.mycompany.parcinghtml.Main.main(Main.java:37)
+
+May 28, 2015 9:23:57 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Assist{id=230, match=44, player=Novotný, goal=142, playerID=0}
+May 28, 2015 9:23:57 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Assist{id=236, match=44, player=Novotný, goal=145, playerID=0}
+May 28, 2015 9:24:01 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Assist{id=279, match=51, player=Novák, goal=173, playerID=0}
+May 28, 2015 9:24:02 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Goal{id=176, match=52, player=Novák, minit=20, playerID=0}
+May 28, 2015 9:24:02 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Goal{id=177, match=52, player=Novák, minit=27, playerID=0}
+May 28, 2015 9:24:02 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Assist{id=294, match=52, player=Bílek, goal=181, playerID=0}
+May 28, 2015 9:24:08 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
+SEVERE: Parsing failed for match with id: Match{id=61, date=2015-04-04, opponent=HC Oceláři Třinec, spartaGoals=2, opponentGoals=3, spartaShots=32, opponentShots=39, spartaPenalty=5, opponentPenalty=3, home=hostia, bestPlayer=null, playoff=playoff, season=2015}
+java.lang.StringIndexOutOfBoundsException: String index out of range: -10
+	at java.lang.String.substring(String.java:1954)
+	at com.mycompany.parcinghtml.ParsingMatch.parseMatch(ParsingMatch.java:147)
+	at com.mycompany.parcinghtml.ParsingAllMatches.parsingMatches(ParsingAllMatches.java:45)
+	at com.mycompany.parcinghtml.Main.main(Main.java:37)
+
+May 28, 2015 9:24:14 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
+SEVERE: Parsing failed for match with id: Match{id=71, date=2013-10-04, opponent=Kometa Brno, spartaGoals=1, opponentGoals=2, spartaShots=18, opponentShots=35, spartaPenalty=6, opponentPenalty=1, home=hostia, bestPlayer=null, playoff=null, season=2014}
+java.lang.StringIndexOutOfBoundsException: String index out of range: -10
+	at java.lang.String.substring(String.java:1954)
+	at com.mycompany.parcinghtml.ParsingMatch.parseMatch(ParsingMatch.java:147)
+	at com.mycompany.parcinghtml.ParsingAllMatches.parsingMatches(ParsingAllMatches.java:45)
+	at com.mycompany.parcinghtml.Main.main(Main.java:37)
+
+May 28, 2015 9:24:16 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Assist{id=422, match=75, player=Přibyl I., goal=266, playerID=0}
+May 28, 2015 9:24:17 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Assist{id=432, match=77, player=Přibyl I., goal=272, playerID=0}
+May 28, 2015 9:24:21 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Assist{id=475, match=83, player=Klimek I., goal=301, playerID=0}
+May 28, 2015 9:24:28 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Assist{id=546, match=95, player=Novotný, goal=347, playerID=0}
+May 28, 2015 9:24:45 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
+SEVERE: Parsing failed for match with id: Match{id=122, date=2014-04-06, opponent=Kometa Brno, spartaGoals=2, opponentGoals=3, spartaShots=26, opponentShots=48, spartaPenalty=5, opponentPenalty=5, home=hostia, bestPlayer=null, playoff=playoff, season=2014}
+java.lang.StringIndexOutOfBoundsException: String index out of range: -10
+	at java.lang.String.substring(String.java:1954)
+	at com.mycompany.parcinghtml.ParsingMatch.parseMatch(ParsingMatch.java:147)
+	at com.mycompany.parcinghtml.ParsingAllMatches.parsingMatches(ParsingAllMatches.java:45)
+	at com.mycompany.parcinghtml.Main.main(Main.java:37)
+
+May 28, 2015 9:24:50 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Goal{id=453, match=128, player=Jan, minit=32, playerID=0}
+May 28, 2015 9:24:52 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
+SEVERE: Parsing failed for match with id: Match{id=130, date=2012-09-23, opponent=Kladno, spartaGoals=3, opponentGoals=4, spartaShots=1, opponentShots=0, spartaPenalty=8, opponentPenalty=9, home=domaci, bestPlayer=null, playoff=null, season=2013}
+java.lang.NumberFormatException: For input string: "0,1:1,2:1,2:4,3:4"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.parseInt(Integer.java:615)
+	at com.mycompany.parcinghtml.ParsingMatch.parseMatch(ParsingMatch.java:123)
+	at com.mycompany.parcinghtml.ParsingAllMatches.parsingMatches(ParsingAllMatches.java:45)
+	at com.mycompany.parcinghtml.Main.main(Main.java:37)
+
+May 28, 2015 9:24:52 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Assist{id=707, match=131, player=Vallin, goal=460, playerID=0}
+May 28, 2015 9:24:53 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Assist{id=711, match=132, player=Vallin, goal=463, playerID=0}
+May 28, 2015 9:24:53 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Assist{id=714, match=133, player=Gawryletz, goal=465, playerID=0}
+May 28, 2015 9:24:53 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Assist{id=718, match=133, player=Vallin, goal=467, playerID=0}
+May 28, 2015 9:24:54 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
+SEVERE: Parsing failed for match with id: Match{id=134, date=2012-10-02, opponent=Zlín, spartaGoals=1, opponentGoals=4, spartaShots=0, opponentShots=0, spartaPenalty=5, opponentPenalty=7, home=domaci, bestPlayer=null, playoff=null, season=2013}
+java.lang.NumberFormatException: For input string: "4,1:4"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.parseInt(Integer.java:615)
+	at com.mycompany.parcinghtml.ParsingMatch.parseMatch(ParsingMatch.java:123)
+	at com.mycompany.parcinghtml.ParsingAllMatches.parsingMatches(ParsingAllMatches.java:45)
+	at com.mycompany.parcinghtml.Main.main(Main.java:37)
+
+May 28, 2015 9:24:54 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
+SEVERE: Parsing failed for match with id: Match{id=135, date=2012-10-04, opponent=Slavia, spartaGoals=2, opponentGoals=3, spartaShots=0, opponentShots=0, spartaPenalty=6, opponentPenalty=2, home=hostia, bestPlayer=null, playoff=null, season=2013}
+java.lang.NumberFormatException: For input string: "1,1:1,1:2,3:2"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.parseInt(Integer.java:615)
+	at com.mycompany.parcinghtml.ParsingMatch.parseMatch(ParsingMatch.java:143)
+	at com.mycompany.parcinghtml.ParsingAllMatches.parsingMatches(ParsingAllMatches.java:45)
+	at com.mycompany.parcinghtml.Main.main(Main.java:37)
+
+May 28, 2015 9:24:56 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+SEVERE: Player wasnt found in db: Assist{id=726, match=137, player=Vantuch, goal=473, playerID=0}

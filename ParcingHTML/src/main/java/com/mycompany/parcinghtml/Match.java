@@ -23,6 +23,7 @@ public class Match {
     private int opponentPenalty;
     private String home;
     private String bestPlayer;
+    private String playoff;
     private int season;
 
     public int getId() {
@@ -31,7 +32,17 @@ public class Match {
 
     @Override
     public String toString() {
-        return "Match{" + "id=" + id + ", date=" + date + ", opponent=" + opponent + ", spartaGoals=" + spartaGoals + ", opponentGoals=" + opponentGoals + ", spartaShots=" + spartaShots + ", opponentShots=" + opponentShots + ", spartaPenalty=" + spartaPenalty + ", opponentPenalty=" + opponentPenalty + ", home=" + home + ", bestPlayer=" + bestPlayer + ", season=" + season + '}';
+        return "Match{" + "id=" + id + ", date=" + date + ", opponent=" + opponent + ", spartaGoals=" + spartaGoals + ", opponentGoals=" + opponentGoals + ", spartaShots=" + spartaShots + ", opponentShots=" + opponentShots + ", spartaPenalty=" + spartaPenalty + ", opponentPenalty=" + opponentPenalty + ", home=" + home + ", bestPlayer=" + bestPlayer + ", playoff=" + playoff + ", season=" + season + '}';
+    }
+
+
+
+    public String getPlayoff() {
+        return playoff;
+    }
+
+    public void setPlayoff(String playoff) {
+        this.playoff = playoff;
     }
 
 
