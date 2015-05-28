@@ -20,4 +20,7 @@ public interface PlayerManager {
     List<Player> getAllPlayers(int year, String orderBy, boolean ascending) throws RuntimeException;
     
     Player getPlayerInfo(Integer id) throws RuntimeException;
+    
+    //To iste ako getAllplayers() akurat ze vrati len statistiky proti jednemu konkretnemu superovi
+    List<Player> getAllPlayersVSTeams(String opponent,int year,String orderBy,boolean ascending) throws RuntimeException;
 }
