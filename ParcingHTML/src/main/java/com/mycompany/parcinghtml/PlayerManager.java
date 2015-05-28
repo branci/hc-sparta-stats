@@ -14,7 +14,10 @@ import java.util.List;
 public interface PlayerManager {
     
     //Vrati vsetkych hracov aktualne ulozenych v tabulke Players
-    List<Player> getAllPlayers(int year) throws RuntimeException;
+    //orderBy vybere atribut podla ktoreho budu hraci zoradeni
+    //NAME, GOALS, ASSISTS, PENALTY_MINUTES, SHOTS, HITS su mozne hodnoty   
+    //ascending true = od najmensej hodnoty po najvacsiu, false opacne
+    List<Player> getAllPlayers(int year, String orderBy, boolean ascending) throws RuntimeException;
     
     Player getPlayerInfo(Integer id) throws RuntimeException;
 }

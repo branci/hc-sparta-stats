@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -58,25 +58,38 @@ public class PlayerManagerImpl implements PlayerManager {
     } 
 
     @Override
-    public List<Player> getAllPlayers(int year) throws RuntimeException {
+    public List<Player> getAllPlayers(int year,String orderBy,boolean ascending) throws RuntimeException {
         checkDataSource();
         Connection conn = null;
         PreparedStatement st = null;
-        try{
-            conn = dataSource.getConnection();
-            st = conn.prepareStatement(
-                    "SELECT PLAYERID, players.NAME,sum(GOALS) as GOALS, sum(ASSISTS) as ASSISTS, sum(PENALTY_MINUTES) as PENALTY_MINUTES, sum(SHOTS) as SHOTS, sum(HITS) as HITS" +
+        String SQL = null;
+        if (ascending) {
+        SQL = "SELECT PLAYERID, players.NAME,sum(GOALS) as GOALS, sum(ASSISTS) as ASSISTS, sum(PENALTY_MINUTES) as PENALTY_MINUTES, sum(SHOTS) as SHOTS, sum(HITS) as HITS" +
 "                            from STATS NATURAL INNER JOIN PLAYERS " +
 "                            INNER JOIN \"MATCH\" ON match_id = matchid" +
 "                            WHERE season = ?" +
-"                            GROUP BY NAME, PLAYERID ORDER BY name");
-            st.setInt(1, year);
+"                            GROUP BY NAME, PLAYERID ORDER BY " + orderBy + "";
+        }
+        else {
+        SQL = "SELECT PLAYERID, players.NAME,sum(GOALS) as GOALS, sum(ASSISTS) as ASSISTS, sum(PENALTY_MINUTES) as PENALTY_MINUTES, sum(SHOTS) as SHOTS, sum(HITS) as HITS" +
+"                            from STATS NATURAL INNER JOIN PLAYERS " +
+"                            INNER JOIN \"MATCH\" ON match_id = matchid" +
+"                            WHERE season = ?" +
+"                            GROUP BY NAME, PLAYERID ORDER BY " + orderBy + " DESC";
+        }
+        try{
+            conn = dataSource.getConnection();
+            st = conn.prepareStatement(
+                   SQL);
+            st.setInt(1, year);          
             return executeQueryForMultiplePlayers(st);
         } catch (SQLException ex) {
             throw new RuntimeException("Error when getting players from database", ex);
-                    
-        }
+        } finally {
+            DBUtils.closeQuietly(conn, st);
+        }             
     }
+    
     private static Player rowToPlayerInfo(ResultSet rs) throws SQLException {
         Player result = new Player();
         result.setId(rs.getInt("PLAYERID"));
@@ -109,7 +122,9 @@ public class PlayerManagerImpl implements PlayerManager {
             String msg = "Error when getting player with id = " + id + " from DB";
             logger.log(Level.SEVERE, msg, ex);
             throw new RuntimeException(msg, ex);
-        }               
+        } finally {
+            DBUtils.closeQuietly(conn, st);
+        }                
     }
    
     static Player executeQueryForSinglePlayer(PreparedStatement st) throws SQLException, RuntimeException {
