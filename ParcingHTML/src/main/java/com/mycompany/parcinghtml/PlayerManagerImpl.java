@@ -26,6 +26,10 @@ public class PlayerManagerImpl implements PlayerManager {
     private static final Logger logger = Logger.getLogger(
             PlayerManagerImpl.class.getName());
     
+    public PlayerManagerImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+        
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }

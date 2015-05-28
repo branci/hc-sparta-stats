@@ -39,6 +39,12 @@
             <artifactId>derbyclient</artifactId>
             <version>10.10.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>4.1.5.RELEASE</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     <name>ParsingHTML</name>
 </project>
