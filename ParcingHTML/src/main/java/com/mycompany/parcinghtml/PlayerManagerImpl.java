@@ -61,23 +61,31 @@ public class PlayerManagerImpl implements PlayerManager {
     } 
 
     @Override
-    public List<Player> getAllPlayers(int year,String orderBy,boolean ascending) throws RuntimeException {
+    public List<Player> getAllPlayers(int year,String orderBy,boolean ascending, int isPlayoff) throws RuntimeException {
         checkDataSource();
         Connection conn = null;
         PreparedStatement st = null;
         String SQL = null;
+        String playoff = null;
+        switch (isPlayoff) {
+            case 0: playoff = "AND PLAYOFF = 'playoff'";
+                    break;
+            case 1: playoff = "AND PLAYOFF IS NULL";
+                    break;
+            case 2: playoff = "";    
+        }
         if (ascending) {
         SQL = "SELECT PLAYERID, players.NAME,sum(GOALS) as GOALS, sum(ASSISTS) as ASSISTS, sum(PENALTY_MINUTES) as PENALTY_MINUTES, sum(SHOTS) as SHOTS, sum(HITS) as HITS" +
 "                            from STATS NATURAL INNER JOIN PLAYERS " +
 "                            INNER JOIN \"MATCH\" ON match_id = matchid" +
-"                            WHERE season = ?" +
+"                            WHERE season = ? " + playoff + "" +
 "                            GROUP BY NAME, PLAYERID ORDER BY " + orderBy + "";
         }
         else {
         SQL = "SELECT PLAYERID, players.NAME,sum(GOALS) as GOALS, sum(ASSISTS) as ASSISTS, sum(PENALTY_MINUTES) as PENALTY_MINUTES, sum(SHOTS) as SHOTS, sum(HITS) as HITS" +
 "                            from STATS NATURAL INNER JOIN PLAYERS " +
 "                            INNER JOIN \"MATCH\" ON match_id = matchid" +
-"                            WHERE season = ?" +
+"                            WHERE season = ? " + playoff + "" +
 "                            GROUP BY NAME, PLAYERID ORDER BY " + orderBy + " DESC";
         }
         try{
@@ -86,6 +94,7 @@ public class PlayerManagerImpl implements PlayerManager {
                    SQL);
             st.setInt(1, year);          
             return executeQueryForMultiplePlayers(st);
+
         } catch (SQLException ex) {
             String msg = "Error when getting player with id from DB. Error in method getAllPlayers";
             logger.log(Level.SEVERE, msg, ex);
@@ -146,23 +155,32 @@ public class PlayerManagerImpl implements PlayerManager {
         }
     }
     
-    public List<Player> getAllPlayersVSTeams(String opponent,int year,String orderBy,boolean ascending) throws RuntimeException {
+    public List<Player> getAllPlayersVSTeams(String opponent,int year,String orderBy,boolean ascending,int isPlayoff) throws RuntimeException {
         checkDataSource();
         Connection conn = null;
         PreparedStatement st = null;
         String SQL = null;
+        String playoff = null;
+        switch (isPlayoff) {
+            case 0: playoff = "AND PLAYOFF = 'playoff'";
+                    break;
+            case 1: playoff = "AND PLAYOFF IS NULL";
+                    break;
+            case 2: playoff = "";    
+        }
+      
         if (ascending) {
         SQL = "SELECT PLAYERID, PLAYERS.NAME,sum(GOALS) as GOALS, sum(ASSISTS) as ASSISTS, sum(PENALTY_MINUTES) as PENALTY_MINUTES, sum(SHOTS) as SHOTS, sum(HITS) as HITS" +
 "                            from STATS NATURAL INNER JOIN PLAYERS " +
 "                            INNER JOIN \"MATCH\" ON match_id = matchid" +
-"                            WHERE season = ? AND OPPONENT ='" + opponent + "'" +
+"                            WHERE season = ? AND OPPONENT ='" + opponent + "' " + playoff + "" +
 "                            GROUP BY NAME, PLAYERID ORDER BY " + orderBy + "";
         }
         else {
         SQL = "SELECT PLAYERID, PLAYERS.NAME,sum(GOALS) as GOALS, sum(ASSISTS) as ASSISTS, sum(PENALTY_MINUTES) as PENALTY_MINUTES, sum(SHOTS) as SHOTS, sum(HITS) as HITS" +
 "                            from STATS NATURAL INNER JOIN PLAYERS " +
 "                            INNER JOIN \"MATCH\" ON match_id = matchid" +
-"                            WHERE season = ? AND OPPONENT ='" + opponent + "'" +
+"                            WHERE season = ? AND OPPONENT ='" + opponent + "' " + playoff + "" +
 "                            GROUP BY NAME, PLAYERID ORDER BY " + orderBy + " DESC";
         }
         try{

@@ -80,17 +80,25 @@ public class MatchManagerImpl implements MatchManager {
     }
 
     @Override
-    public List<MatchesTeam> getMatchesOpponent(int year) throws RuntimeException {        
+    public List<MatchesTeam> getMatchesOpponent(int year, int isPlayoff) throws RuntimeException {        
         
         checkDataSource();
         Connection conn = null;
         PreparedStatement st = null;
+        String playoff = null;
+        switch (isPlayoff) {
+            case 0: playoff = "AND PLAYOFF = 'playoff'";
+                    break;
+            case 1: playoff = "AND PLAYOFF IS NULL";
+                    break;
+            case 2: playoff = "";    
+        }
         try{
             conn = dataSource.getConnection();
             st = conn.prepareStatement(
                     "SELECT OPPONENT, sum(SPARTA_GOALS) as SPARTA_GOALS, sum(OPPONET_GOALS) as OPPONET_GOALS, sum(SPARTA_SHOTS) as SPARTA_SHOTS," +
                 "    sum(OPPONET_SHOTS) as OPPONET_SHOTS, sum(SPARTA_PENALTY) as SPARTA_PENALTY, sum(OPPONET_PENALTY) as OPPONET_PENALTY from \"MATCH\"" +
-                "    WHERE SEASON = ? " +
+                "    WHERE SEASON = ? " + playoff + ""  +
                 "    GROUP BY  OPPONENT");
             st.setInt(1, year);
             ResultSet rs = st.executeQuery();
@@ -104,9 +112,9 @@ public class MatchManagerImpl implements MatchManager {
             for (int i=0; i< result.size(); i++){
                 String opponent = result.get(i).getOpponent();
                 SQL = "SELECT COUNT(OPPONENT) from \"MATCH\"" +
-                    "WHERE SEASON = " + year + "AND SPARTA_GOALS < OPPONET_GOALS AND OPPONENT = '" + opponent + "'";
+                    "WHERE SEASON = " + year + "AND SPARTA_GOALS > OPPONET_GOALS AND OPPONENT = '" + opponent + "' " + playoff + "";
                 SQL2 = "SELECT COUNT(OPPONENT) from \"MATCH\"" +
-                    "WHERE SEASON = " + year + "AND SPARTA_GOALS > OPPONET_GOALS AND OPPONENT = '" + opponent + "'";
+                    "WHERE SEASON = " + year + "AND SPARTA_GOALS < OPPONET_GOALS AND OPPONENT = '" + opponent + "' " + playoff + "";
                 st = conn.prepareStatement(SQL);
                 rs = st.executeQuery();
                 if (rs.next()) {
