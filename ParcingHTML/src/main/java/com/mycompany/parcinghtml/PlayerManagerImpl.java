@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,6 +26,10 @@ public class PlayerManagerImpl implements PlayerManager {
     private static final Logger logger = Logger.getLogger(
             PlayerManagerImpl.class.getName());
     
+    public PlayerManagerImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+        
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -84,7 +87,9 @@ public class PlayerManagerImpl implements PlayerManager {
             st.setInt(1, year);          
             return executeQueryForMultiplePlayers(st);
         } catch (SQLException ex) {
-            throw new RuntimeException("Error when getting players from database", ex);
+            String msg = "Error when getting player with id from DB. Error in method getAllPlayers";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new RuntimeException(msg, ex);            
         } finally {
             DBUtils.closeQuietly(conn, st);
         }             
@@ -119,7 +124,7 @@ public class PlayerManagerImpl implements PlayerManager {
             st.setInt(1, id);
             return executeQueryForSinglePlayer(st);
         } catch (SQLException ex) {
-            String msg = "Error when getting player with id = " + id + " from DB";
+            String msg = "Error when getting player with id = " + id + " from DB. Error in method getPlayerInfo";
             logger.log(Level.SEVERE, msg, ex);
             throw new RuntimeException(msg, ex);
         } finally {
@@ -139,5 +144,41 @@ public class PlayerManagerImpl implements PlayerManager {
         } else {
             return null;
         }
-    }  
+    }
+    
+    public List<Player> getAllPlayersVSTeams(String opponent,int year,String orderBy,boolean ascending) throws RuntimeException {
+        checkDataSource();
+        Connection conn = null;
+        PreparedStatement st = null;
+        String SQL = null;
+        if (ascending) {
+        SQL = "SELECT PLAYERID, PLAYERS.NAME,sum(GOALS) as GOALS, sum(ASSISTS) as ASSISTS, sum(PENALTY_MINUTES) as PENALTY_MINUTES, sum(SHOTS) as SHOTS, sum(HITS) as HITS" +
+"                            from STATS NATURAL INNER JOIN PLAYERS " +
+"                            INNER JOIN \"MATCH\" ON match_id = matchid" +
+"                            WHERE season = ? AND OPPONENT ='" + opponent + "'" +
+"                            GROUP BY NAME, PLAYERID ORDER BY " + orderBy + "";
+        }
+        else {
+        SQL = "SELECT PLAYERID, PLAYERS.NAME,sum(GOALS) as GOALS, sum(ASSISTS) as ASSISTS, sum(PENALTY_MINUTES) as PENALTY_MINUTES, sum(SHOTS) as SHOTS, sum(HITS) as HITS" +
+"                            from STATS NATURAL INNER JOIN PLAYERS " +
+"                            INNER JOIN \"MATCH\" ON match_id = matchid" +
+"                            WHERE season = ? AND OPPONENT ='" + opponent + "'" +
+"                            GROUP BY NAME, PLAYERID ORDER BY " + orderBy + " DESC";
+        }
+        try{
+            conn = dataSource.getConnection();
+            st = conn.prepareStatement(
+                   SQL);
+            st.setInt(1, year);          
+            return executeQueryForMultiplePlayers(st);
+        } catch (SQLException ex) {
+            String msg = "Error when getting player from DB. Error in method getAllPlayersVSTeams";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new RuntimeException(msg, ex);
+        } finally {
+            DBUtils.closeQuietly(conn, st);
+        }             
+    }
+    
+    
 }
