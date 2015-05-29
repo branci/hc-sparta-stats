@@ -46,7 +46,7 @@ public class DatabaseManager {
         }
     }
     public void addMatch(Match match) throws SQLException {
-        String sql = "INSERT INTO \"MATCH\"(MATCH_ID,DATE,OPPONENT,SPARTA_GOALS,OPPONET_GOALS,SPARTA_SHOTS,OPPONET_SHOTS,SPARTA_PENALTY,OPPONET_PENALTY,HOME,BEST_PLAYER,SEASON) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO \"MATCH\"(MATCH_ID,DATE,OPPONENT,SPARTA_GOALS,OPPONET_GOALS,SPARTA_SHOTS,OPPONET_SHOTS,SPARTA_PENALTY,OPPONET_PENALTY,HOME,BEST_PLAYER,PLAYOFF,SEASON) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try (Connection conn = dataSource.getConnection()) {
             conn.setAutoCommit(false);
             try (PreparedStatement st = conn.prepareStatement(sql)) {
@@ -61,7 +61,8 @@ public class DatabaseManager {
                 st.setInt(9, match.getOpponentPenalty());
                 st.setString(10,  match.getHome());
                 st.setString(11, match.getBestPlayer());             
-                st.setInt(12, match.getSeason());
+                st.setString(12,match.getPlayoff());
+                st.setInt(13, match.getSeason());
                 st.executeUpdate();
                 conn.commit();
             } catch (SQLException ex) {
