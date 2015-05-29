@@ -5,6 +5,7 @@
  */
 package com.mycompany.parcinghtml;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,15 +26,30 @@ public class PlayerManagerImpl implements PlayerManager {
     
     private static final Logger logger = Logger.getLogger(
             PlayerManagerImpl.class.getName());
+
     
     public PlayerManagerImpl(DataSource dataSource) {
         this.dataSource = dataSource;
-    }
         
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
+
     }
-    
+    public void initFunction(){
+        ParsingClassPlayers psp = new ParsingClassPlayers(dataSource);
+        try {      
+            psp.downloadSource();
+        } catch (SQLException ex) {
+            Logger.getLogger(PlayerManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ParsingAllMatches parsing = new ParsingAllMatches(dataSource);                
+
+        try {
+            parsing.parsingMatches(2015,2015);
+        } catch (IOException ex) {
+            Logger.getLogger(PlayerManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(PlayerManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     private void checkDataSource() {
         if (dataSource == null) {
             throw new IllegalStateException("DataSource is not set");
@@ -42,7 +58,7 @@ public class PlayerManagerImpl implements PlayerManager {
                    
         static List<Player> executeQueryForMultiplePlayers(PreparedStatement st) throws SQLException {
         ResultSet rs = st.executeQuery();
-        List<Player> result = new ArrayList<Player>();
+        List<Player> result = new ArrayList<>();
         while (rs.next()) {
             result.add(rowToPlayer(rs));
         }
@@ -78,12 +94,11 @@ public class PlayerManagerImpl implements PlayerManager {
 "                            from STATS NATURAL INNER JOIN PLAYERS " +
 "                            INNER JOIN \"MATCH\" ON match_id = matchid" +
 "                            WHERE season = ?" +
-"                            GROUP BY NAME, PLAYERID ORDER BY " + orderBy + " DESC";
+"                            GROUP BY NAME, PLAYERID ORDER BY " + orderBy + "DESC";
         }
         try{
             conn = dataSource.getConnection();
-            st = conn.prepareStatement(
-                   SQL);
+            st = conn.prepareStatement(SQL);
             st.setInt(1, year);          
             return executeQueryForMultiplePlayers(st);
         } catch (SQLException ex) {
@@ -178,7 +193,5 @@ public class PlayerManagerImpl implements PlayerManager {
         } finally {
             DBUtils.closeQuietly(conn, st);
         }             
-    }
-    
-    
+    }        
 }

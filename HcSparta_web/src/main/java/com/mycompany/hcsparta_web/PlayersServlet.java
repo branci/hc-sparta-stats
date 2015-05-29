@@ -43,6 +43,7 @@ public class PlayersServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -135,13 +136,15 @@ public class PlayersServlet extends HttpServlet {
         return Date.valueOf(date);
     }
     
-    private PlayerManager getPlayerManager() {
-        return (PlayerManager) getServletContext().getAttribute("playerManager");
+    private PlayerManagerImpl getPlayerManager() {
+        PlayerManagerImpl pl = (PlayerManagerImpl) getServletContext().getAttribute("playerManager");
+        //pl.initFunction();
+        return pl;
     }
     
     private void showPlayersList (HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        try {
+        try {           
              request.setAttribute("players", getPlayerManager().getAllPlayers(2015, "NAME", true));
              request.getRequestDispatcher("/list.jsp").forward(request, response);
 
@@ -149,7 +152,5 @@ public class PlayersServlet extends HttpServlet {
             log.error("cannot show players", ex);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
         }
-    }
-    
-  
+    }      
 }

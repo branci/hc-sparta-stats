@@ -7,6 +7,7 @@ package com.mycompany.hcsparta_web;
 
 
 import com.mycompany.parcinghtml.PlayerManager;
+import com.mycompany.parcinghtml.PlayerManagerImpl;
 import com.mycompany.parcinghtml.SpringConfig;
 
 import org.slf4j.Logger;
@@ -24,17 +25,21 @@ import javax.servlet.annotation.WebListener;
 @WebListener
 public class StartListener implements ServletContextListener {
 
-        final static Logger log = LoggerFactory.getLogger(StartListener.class);
+    final static Logger log = LoggerFactory.getLogger(StartListener.class);
 
     @Override
     public void contextInitialized(ServletContextEvent ev) {
         log.info("webová aplikace inicializována");
         ServletContext servletContext = ev.getServletContext();
         ApplicationContext springContext = new AnnotationConfigApplicationContext(SpringConfig.class);
-        servletContext.setAttribute("playerManager", springContext.getBean("playerManager", PlayerManager.class));
-        log.info("vytvořeny manažery");
-    }
 
+        servletContext.setAttribute("playerManager", springContext.getBean("playerManager", PlayerManagerImpl.class));
+        PlayerManagerImpl pl = (PlayerManagerImpl) servletContext.getAttribute("playerManager");
+        pl.initFunction();
+        log.info("vytvořeny manažery");
+                
+
+    }    
     @Override
     public void contextDestroyed(ServletContextEvent ev) {
         log.info("aplikace končí");

@@ -68,7 +68,7 @@ public class ParsingMatch {
 
     public void parseDate(String date, Match match) {
         String[] array = date.split(",");
-        System.out.println(array[0]);
+        //System.out.println(array[0]);
         if(array[0].matches(".[a-zA-Z].")) match.setPlayoff("playoff");
         array = array[1].split(" ");
 
@@ -155,7 +155,7 @@ public class ParsingMatch {
             logMatch.log(Level.SEVERE, "Parsing failed for match with id: " + match.toString(), e);
             return;
         }
-        System.out.println(match);
+        //System.out.println(match);
         if (match.getSpartaGoals() != 0) {
             parseGoals(gameDetails.substring(gameDetails.indexOf(goalsElementText) + goalsElementText.length(), gameDetails.indexOf(refereeElementText) - 2), match);
         }

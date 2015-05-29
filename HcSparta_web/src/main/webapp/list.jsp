@@ -31,13 +31,13 @@
         <tr>
             <td><c:out value="${player.id}"/></td>
             <td><c:out value="${player.name}"/></td>
-            <td><c:out value="${player.age}"/></td>
+            <%--<td><c:out value="${player.age}"/></td>
             <td><c:out value="${player.height}"/></td>
             <td><c:out value="${player.weight}"/></td>
             <td><c:out value="${player.playerNum}"/></td>
-            <td><c:out value="${player.position}"/></td>
+            <td><c:out value="${player.position}"/></td>--%>
             <td><c:out value="${player.goals}"/></td>
-            <td><c:out value="${player.assists}"/></td>
+            <td><c:out value="${player.assist}"/></td>
             <td><c:out value="${player.penalty}"/></td>
             <td><c:out value="${player.shots}"/></td>
             <td><c:out value="${player.hits}"/></td>
