@@ -50,6 +50,7 @@
 </table>
 <br><br><br>
 
+<%--
 <form action="${pageContext.request.contextPath}/players/season" method="post">
   <select name="seasonItem">
     <option value="2015">2014/15</option>
@@ -61,6 +62,7 @@
   </select>
   <input type="submit" value="Select season">
 </form>
+--%>
 
 <%--
 <form action="${pageContext.request.contextPath}/players/games" method="post">
@@ -75,6 +77,14 @@
 <%--request.getParameter("item");--%>
 
 <form action="${pageContext.request.contextPath}/players/order" method="post">
+    <select name="seasonItem">
+    <option value="2015">2014/15</option>
+    <option value="2014">2013/14</option>
+    <option value="2013">2012/13</option>
+    <option value="2012">2011/12</option>
+    <option value="2011">2010/11</option>
+    <option value="2010">2009/10</option>
+  </select>
   <select name="orderItem">
     <option value="NAME">Name</option>
     <option value="GOALS">Goals</option>
@@ -84,8 +94,8 @@
     <option value="HITS">Hits</option>
   </select>
     <select name="ascItem">
-    <option value="true">Ascending</option>
     <option value="false">Descending</option>
+    <option value="true">Ascending</option>
   </select>
   <input type="submit" value="Order by">
 </form>

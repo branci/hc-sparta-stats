@@ -74,17 +74,17 @@ public class PlayersServlet extends HttpServlet {
             boolean ascending =Boolean.parseBoolean(request.getParameter("ascItem"));
             
             showPlayersList(request, response, season, orderBy, ascending, 2);
-            response.sendRedirect(request.getContextPath()+ "/players");
+            //response.sendRedirect(request.getContextPath()+ "/players");
             
             return;
 
         } else if (action.equals("/order")) {
-            //Integer season = Integer.parseInt(request.getParameter("seasonItem"));
+            int season = Integer.parseInt(request.getParameter("seasonItem"));
             String orderBy = request.getParameter("orderItem");
             boolean ascending =Boolean.parseBoolean(request.getParameter("ascItem"));
             
-            showPlayersList(request, response, 2015, orderBy, ascending, 2);
-            response.sendRedirect(request.getContextPath()+ "/players");
+            showPlayersList(request, response, season, orderBy, ascending, 2);
+            //response.sendRedirect(request.getContextPath()+ "/players");
             
             return;
         }
