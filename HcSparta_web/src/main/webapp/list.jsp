@@ -15,11 +15,13 @@
     <tr>
         <th>Id</th>
         <th>Name</th>
+        <%-- 
         <th>Age</th>
         <th>Height</th>
         <th>Weight</th>
         <th>Num</th>
         <th>Pos</th>
+        --%>
         <th>Goals</th>
         <th>Assists</th>
         <th>Penalty minutes</th>
@@ -31,11 +33,13 @@
         <tr>
             <td><c:out value="${player.id}"/></td>
             <td><c:out value="${player.name}"/></td>
-            <%--<td><c:out value="${player.age}"/></td>
+            <%--
+            <td><c:out value="${player.age}"/></td>
             <td><c:out value="${player.height}"/></td>
             <td><c:out value="${player.weight}"/></td>
             <td><c:out value="${player.playerNum}"/></td>
-            <td><c:out value="${player.position}"/></td>--%>
+            <td><c:out value="${player.position}"/></td>
+            --%>
             <td><c:out value="${player.goals}"/></td>
             <td><c:out value="${player.assist}"/></td>
             <td><c:out value="${player.penalty}"/></td>
@@ -45,6 +49,49 @@
     </c:forEach>
 </table>
 <br><br><br>
+
+<form action="${pageContext.request.contextPath}/players/season" method="post">
+  <select name="seasonItem">
+    <option value="2015">2014/15</option>
+    <option value="2014">2013/14</option>
+    <option value="2013">2012/13</option>
+    <option value="2012">2011/12</option>
+    <option value="2011">2010/11</option>
+    <option value="2010">2009/10</option>
+  </select>
+  <input type="submit" value="Select season">
+</form>
+
+<%--
+<form action="${pageContext.request.contextPath}/players/games" method="post">
+  <select name="gamesItem">
+    <option value="1">Regular</option>
+    <option value="2">Playoff</option>
+    <option value="3">All</option>
+  </select>
+  <input type="submit" value="Select games">
+</form>
+
+<%--request.getParameter("item");--%>
+
+<form action="${pageContext.request.contextPath}/players/order" method="post">
+  <select name="orderItem">
+    <option value="NAME">Name</option>
+    <option value="GOALS">Goals</option>
+    <option value="ASSISTS">Assists</option>
+    <option value="PENALTY_MINUTES">Penalty minutes</option>
+    <option value="SHOTS">Shots</option>
+    <option value="HITS">Hits</option>
+  </select>
+    <select name="ascItem">
+    <option value="true">Ascending</option>
+    <option value="false">Descending</option>
+  </select>
+  <input type="submit" value="Order by">
+</form>
+
+  
+  
 
 </body>
 </html>
