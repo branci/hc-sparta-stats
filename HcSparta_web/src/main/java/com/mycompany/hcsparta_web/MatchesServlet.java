@@ -34,11 +34,11 @@ import javax.servlet.annotation.WebServlet;
  *
  * @author Branislav Smik <xsmik @fi.muni>
  */
-@WebServlet( PlayersServlet.URL_MAPPING + "/*")
-public class PlayersServlet extends HttpServlet {
+@WebServlet( MatchesServlet.URL_MAPPING + "/*")
+public class MatchesServlet extends HttpServlet {
 
-    public static final String URL_MAPPING = "/players";
-    private final static Logger log = LoggerFactory.getLogger(PlayersServlet.class);
+    public static final String URL_MAPPING = "/matches";
+    private final static Logger log = LoggerFactory.getLogger(MatchesServlet.class);
     
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -52,7 +52,7 @@ public class PlayersServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        showPlayersList(request, response, 2015, "NAME", true, 2);
+        showMatchesList(request, response, 2015, 2);
         
     }
 
@@ -70,34 +70,35 @@ public class PlayersServlet extends HttpServlet {
         String action = request.getPathInfo();
         request.setCharacterEncoding("utf-8");
       
-        if (action.equals("/order")) {
-            int season = Integer.parseInt(request.getParameter("seasonItem"));
-            String orderBy = request.getParameter("orderItem");
-            boolean ascending =Boolean.parseBoolean(request.getParameter("ascItem"));
+        if (action.equals("/season")) {
             
-            showPlayersList(request, response, season, orderBy, ascending, 2);
-            //response.sendRedirect(request.getContextPath()+ "/players");
+            int season = Integer.parseInt(request.getParameter("seasonItem"));
+            int games = Integer.parseInt(request.getParameter("gamesItem"));
+            
+            showMatchesList(request, response, season, games);
             
             return;
-        }
+        } 
+    }
+
+ 
+    
+    private MatchManager getMatchManager() {
+        return (MatchManager) getServletContext().getAttribute("matchManager");
     }
     
-    private PlayerManager getPlayerManager() {
-        return (PlayerManager) getServletContext().getAttribute("playerManager");
-    }
-    
-    
-    private void showPlayersList (HttpServletRequest request, HttpServletResponse response, int year, String orderBy, boolean ascending, int isPlayoff) 
+    private void showMatchesList (HttpServletRequest request, HttpServletResponse response, int year, int isPlayoff) 
             throws ServletException, IOException {
         try {
-            List<Player> result = getPlayerManager().getAllPlayers(year, orderBy, ascending, isPlayoff);
-            request.setAttribute("players", result);
-             request.getRequestDispatcher("/list.jsp").forward(request, response);
+            List<MatchesTeam> result = getMatchManager().getMatchesOpponent(year, isPlayoff);
+            request.setAttribute("opponents", result);
+             request.getRequestDispatcher("/list2.jsp").forward(request, response);
 
         } catch (ServiceFailureException ex) {
-            log.error("cannot show players", ex);
+            log.error("cannot show matches for opponents", ex);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
         }
-    }      
+    }
+    
    
 }
