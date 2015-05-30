@@ -20,4 +20,6 @@ public interface MatchManager {
     //isPlayoff 0=playoff, 1=zakladna cast, 2=vsetko dokopy
     List<MatchesTeam> getMatchesOpponent(int year, int isPlayoff) throws RuntimeException;
     
+    //Vrati jednotlive zapasi proti zvolenemu druzstvu
+    List<Match> getMatchesVSSingleOpponent(int year, String opponent, int isPlayoff);
 }

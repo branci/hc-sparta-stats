@@ -23,6 +23,12 @@ public class Player {
     private Integer penalty;
     private Integer shots;
     private Integer hits;
+    private Double shotEffectivity;
+    
+    private Integer firstThird;
+    private Integer secondThird;
+    private Integer thirdThird;
+    private Integer extraTime;
 
     public Integer getId() {
         return id;
@@ -56,6 +62,12 @@ public class Player {
         return goals;
     }
 
+    public Double getShotEffectivity() {
+        return shotEffectivity;
+    }
+
+    
+    
     public Integer getAssist() {
         return assist;
     }
@@ -72,6 +84,44 @@ public class Player {
         return hits;
     }
 
+    public Integer getFirstThird() {
+        return firstThird;
+    }
+
+    public Integer getSecondThird() {
+        return secondThird;
+    }
+
+    public Integer getThirdThird() {
+        return thirdThird;
+    }
+
+    public Integer getExtraTime() {
+        return extraTime;
+    }
+
+    public void setFirstThird(Integer firstThird) {
+        this.firstThird = firstThird;
+    }
+
+    public void setSecondThird(Integer secondThird) {
+        this.secondThird = secondThird;
+    }
+
+    public void setThirdThird(Integer thirdThird) {
+        this.thirdThird = thirdThird;
+    }
+
+    public void setExtraTime(Integer extraTime) {
+        this.extraTime = extraTime;
+    }
+
+    public void setShotEffectivity(Double shotEffectivity) {
+        this.shotEffectivity = shotEffectivity;
+    }
+    
+    
+    
     public void setGoals(Integer goals) {
         this.goals = goals;
     }
@@ -132,11 +182,15 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player{" + "name=" + name + ", goals=" + goals + ", assist=" + assist + ", penalty=" + penalty + ", shots=" + shots + ", hits=" + hits + '}';
+        return "Player{" + "name=" + name + ", goals=" + goals + ", assist=" + assist + ", penalty=" + penalty + ", shots=" + shots + ", hits=" + hits + ", shot % = " + shotEffectivity + "'}'";
     }
     
     public String toStringInfo() {
         return "Player{" + "name=" + name + ", age=" + age + ", weight=" + weight + ", height=" + height + ", position=" + position + ", playernum=" + playerNum + '}';
+    }
+    
+    public String toStringGoals() {
+        return "1.third " + firstThird + " 2.Third " + secondThird + " ThirdThird " + thirdThird + " extraTime " + extraTime +"" ;
     }
 
     @Override
