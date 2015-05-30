@@ -17,10 +17,11 @@ public interface PlayerManager {
     //orderBy vybere atribut podla ktoreho budu hraci zoradeni
     //NAME, GOALS, ASSISTS, PENALTY_MINUTES, SHOTS, HITS su mozne hodnoty   
     //ascending true = od najmensej hodnoty po najvacsiu, false opacne
-    List<Player> getAllPlayers(int year, String orderBy, boolean ascending) throws RuntimeException;
+    //isPlayoff 0=playoff, 1=zakladna cast, 2=vsetko dokopy
+    List<Player> getAllPlayers(int year, String orderBy, boolean ascending, int isPlayoff) throws RuntimeException;
     
     Player getPlayerInfo(Integer id) throws RuntimeException;
     
     //To iste ako getAllplayers() akurat ze vrati len statistiky proti jednemu konkretnemu superovi
-    List<Player> getAllPlayersVSTeams(String opponent,int year,String orderBy,boolean ascending) throws RuntimeException;
+    List<Player> getAllPlayersVSTeams(String opponent,int year,String orderBy,boolean ascending, int isPlayoff) throws RuntimeException;
 }

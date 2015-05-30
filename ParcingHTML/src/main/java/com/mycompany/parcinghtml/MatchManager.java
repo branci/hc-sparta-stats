@@ -16,6 +16,8 @@ public interface MatchManager {
     //return all matches
     List<Match> getMatches(int year) throws RuntimeException;
     
-    List<MatchesTeam> getMatchesOpponent(int year) throws RuntimeException;
+    //vrati zapasi proti jednotlivym druzstvam
+    //isPlayoff 0=playoff, 1=zakladna cast, 2=vsetko dokopy
+    List<MatchesTeam> getMatchesOpponent(int year, int isPlayoff) throws RuntimeException;
     
 }
