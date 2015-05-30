@@ -43,7 +43,7 @@ public class PlayerManagerImpl implements PlayerManager {
         ParsingAllMatches parsing = new ParsingAllMatches(dataSource);                
 
         try {
-            parsing.parsingMatches(2015,2015);
+            parsing.parsingMatches(2010,2015);
         } catch (IOException ex) {
             Logger.getLogger(PlayerManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -62,6 +62,7 @@ public class PlayerManagerImpl implements PlayerManager {
         while (rs.next()) {
             result.add(rowToPlayer(rs));
         }
+       
         return result;
     }
         private static Player rowToPlayer(ResultSet rs) throws SQLException {
@@ -73,11 +74,13 @@ public class PlayerManagerImpl implements PlayerManager {
         result.setPenalty(rs.getInt("PENALTY_MINUTES"));
         result.setShots(rs.getInt("SHOTS"));
         result.setHits(rs.getInt("HITS"));
+        double d = (((double)result.getGoals())/result.getShots());
+        result.setShotEffectivity((double)Math.round(d*100) /100);
         return result;
     } 
 
     @Override
-    public List<Player> getAllPlayers(int year,String orderBy,boolean ascending, int isPlayoff) throws RuntimeException {
+    public List<Player> getAllPlayers(int year,String orderBy,boolean ascending, int isPlayoff , int position) throws RuntimeException {
         checkDataSource();
         Connection conn = null;
         PreparedStatement st = null;
@@ -90,18 +93,26 @@ public class PlayerManagerImpl implements PlayerManager {
                     break;
             case 2: playoff = "";    
         }
+        String pos = null;
+        switch (position) {
+            case 0: pos = "";
+                    break;
+            case 1: pos = "AND POSITION = 1";
+                    break;
+            case 2: pos = "AND POSITION = 2";                   
+        }
         if (ascending) {
         SQL = "SELECT PLAYERID, players.NAME,sum(GOALS) as GOALS, sum(ASSISTS) as ASSISTS, sum(PENALTY_MINUTES) as PENALTY_MINUTES, sum(SHOTS) as SHOTS, sum(HITS) as HITS" +
 "                            from STATS NATURAL INNER JOIN PLAYERS " +
 "                            INNER JOIN \"MATCH\" ON match_id = matchid" +
-"                            WHERE season = ? " + playoff + "" +
+"                            WHERE season = ? " + playoff + " " + pos + "" +
 "                            GROUP BY NAME, PLAYERID ORDER BY " + orderBy + "";
         }
         else {
         SQL = "SELECT PLAYERID, players.NAME,sum(GOALS) as GOALS, sum(ASSISTS) as ASSISTS, sum(PENALTY_MINUTES) as PENALTY_MINUTES, sum(SHOTS) as SHOTS, sum(HITS) as HITS" +
 "                            from STATS NATURAL INNER JOIN PLAYERS " +
 "                            INNER JOIN \"MATCH\" ON match_id = matchid" +
-"                            WHERE season = ?" +  playoff + "" +
+"                            WHERE season = ?" +  playoff + " " + pos + "" +
 "                            GROUP BY NAME, PLAYERID ORDER BY " + orderBy + " DESC";
         }
         try{
@@ -132,7 +143,7 @@ public class PlayerManagerImpl implements PlayerManager {
     }
 
     @Override
-    public Player getPlayerInfo(Integer id) throws RuntimeException {
+    public Player getPlayerInfo(Integer id, int year) throws RuntimeException {
         checkDataSource();
         
         if (id == null) {
@@ -146,7 +157,62 @@ public class PlayerManagerImpl implements PlayerManager {
             st = conn.prepareStatement(
                     "SELECT PLAYERID, NAME, AGE, HEIGHT, WEIGHT, PLAYERNUM, POSITION FROM PLAYERS WHERE PLAYERID = ?");
             st.setInt(1, id);
-            return executeQueryForSinglePlayer(st);
+            ResultSet rs = st.executeQuery();
+            Player result = new Player();
+            while (rs.next()) {
+                result = rowToPlayerInfo(rs);
+            }
+            
+            String SQL = null;
+            String SQL1 = null;
+            String SQL3 = null;
+            String SQL2 = null;            
+                SQL = "SELECT COUNT(GOAL_ID) from GOAL NATURAL INNER JOIN \"MATCH\"  NATURAL INNER JOIN PLAYERS" +
+"                    WHERE SEASON = " + year + " AND \"MINUTE\" < 21 AND PLAYERID = " + id + "";
+                SQL1 = "SELECT COUNT(GOAL_ID) from GOAL NATURAL INNER JOIN \"MATCH\"  NATURAL INNER JOIN PLAYERS" +
+"                    WHERE SEASON = " + year + " AND \"MINUTE\" < 41 AND \"MINUTE\" > 20 AND PLAYERID = " + id + "";
+                SQL2 = "SELECT COUNT(GOAL_ID) from GOAL NATURAL INNER JOIN \"MATCH\"  NATURAL INNER JOIN PLAYERS" +
+"                    WHERE SEASON = " + year + " AND \"MINUTE\" < 61 AND \"MINUTE\" > 40 AND PLAYERID = " + id + "";
+                SQL3 = "SELECT COUNT(GOAL_ID) from GOAL NATURAL INNER JOIN \"MATCH\"  NATURAL INNER JOIN PLAYERS" +
+"                    WHERE SEASON = " + year + " AND \"MINUTE\" > 60 AND PLAYERID = " + id + "";
+               
+                st = conn.prepareStatement(SQL);
+                rs = st.executeQuery();
+                if (rs.next()) {
+                    result.setFirstThird(rs.getInt(1));
+                } else {
+                    logger.log(Level.SEVERE, "Error when getting goals in 1.third from DB");
+                    throw new RuntimeException("Error when getting goals in 1.third from DB");
+                }                
+                st = conn.prepareStatement(SQL1);
+                rs = st.executeQuery();
+                if (rs.next()) {
+                    result.setSecondThird(rs.getInt(1));
+                } else {
+                    logger.log(Level.SEVERE, "Error when getting goals in 2.third from DB");
+                    throw new RuntimeException("Error when getting goals in 2.third from DB");
+                }
+                
+                st = conn.prepareStatement(SQL2);
+                rs = st.executeQuery();
+                if (rs.next()) {
+                    result.setThirdThird(rs.getInt(1));
+                } else {
+                    logger.log(Level.SEVERE, "Error when getting goals in 3.third from DB");
+                    throw new RuntimeException("Error when getting goals in 3.third from DB");
+                }
+                
+                st = conn.prepareStatement(SQL3);
+                rs = st.executeQuery();
+                if (rs.next()) {
+                    result.setExtraTime(rs.getInt(1));
+                } else {
+                    logger.log(Level.SEVERE, "Error when getting goals in extra time from DB");
+                    throw new RuntimeException("Error when getting goals in extra time from DB");
+                }
+                
+                                    
+            return result;
         } catch (SQLException ex) {
             String msg = "Error when getting player with id = " + id + " from DB. Error in method getPlayerInfo";
             logger.log(Level.SEVERE, msg, ex);
@@ -170,7 +236,8 @@ public class PlayerManagerImpl implements PlayerManager {
         }
     }
     
-    public List<Player> getAllPlayersVSTeams(String opponent,int year,String orderBy,boolean ascending,int isPlayoff) throws RuntimeException {
+    @Override
+    public List<Player> getAllPlayersVSTeams(String opponent,int year,String orderBy,boolean ascending,int isPlayoff, int position) throws RuntimeException {
         checkDataSource();
         Connection conn = null;
         PreparedStatement st = null;
@@ -183,19 +250,26 @@ public class PlayerManagerImpl implements PlayerManager {
                     break;
             case 2: playoff = "";    
         }
-      
+        String pos = null;
+        switch (position) {
+            case 0: pos = "";
+                    break;
+            case 1: pos = "AND POSITION = 1";
+                    break;
+            case 2: pos = "AND POSITION = 2";                   
+        }
         if (ascending) {
         SQL = "SELECT PLAYERID, PLAYERS.NAME,sum(GOALS) as GOALS, sum(ASSISTS) as ASSISTS, sum(PENALTY_MINUTES) as PENALTY_MINUTES, sum(SHOTS) as SHOTS, sum(HITS) as HITS" +
 "                            from STATS NATURAL INNER JOIN PLAYERS " +
 "                            INNER JOIN \"MATCH\" ON match_id = matchid" +
-"                            WHERE season = ? AND OPPONENT ='" + opponent + "' " + playoff + "" +
+"                            WHERE season = ? AND OPPONENT ='" + opponent + "' " + playoff + " " + pos + "" +
 "                            GROUP BY NAME, PLAYERID ORDER BY " + orderBy + "";
         }
         else {
         SQL = "SELECT PLAYERID, PLAYERS.NAME,sum(GOALS) as GOALS, sum(ASSISTS) as ASSISTS, sum(PENALTY_MINUTES) as PENALTY_MINUTES, sum(SHOTS) as SHOTS, sum(HITS) as HITS" +
 "                            from STATS NATURAL INNER JOIN PLAYERS " +
 "                            INNER JOIN \"MATCH\" ON match_id = matchid" +
-"                            WHERE season = ? AND OPPONENT ='" + opponent + "' " + playoff + "" +
+"                            WHERE season = ? AND OPPONENT ='" + opponent + "' " + playoff + " " + pos + "" +
 "                            GROUP BY NAME, PLAYERID ORDER BY " + orderBy + " DESC";
         }
         try{
@@ -211,10 +285,6 @@ public class PlayerManagerImpl implements PlayerManager {
         } finally {
             DBUtils.closeQuietly(conn, st);
         }             
-    }        
-
-    public Object getAllPlayers(int i, String name, boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }       
 
 }

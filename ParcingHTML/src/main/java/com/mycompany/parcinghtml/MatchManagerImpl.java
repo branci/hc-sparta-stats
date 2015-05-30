@@ -31,6 +31,7 @@ public class MatchManagerImpl implements MatchManager {
         this.dataSource = dataSource;
     }
     
+    //Kontrola spravnosti data source
     private void checkDataSource() {
         if (dataSource == null) {
             throw new IllegalStateException("DataSource is not set");
@@ -48,7 +49,7 @@ public class MatchManagerImpl implements MatchManager {
                     "SELECT * from \"MATCH\"" +
                     "    WHERE SEASON = ? ");
             st.setInt(1, year);
-            return executeQueryForMatches(st);
+            return executeQueryForMatches(st, 0);
         } catch (SQLException ex) {
             throw new RuntimeException("Error when getting players from database", ex);
         } finally {
@@ -57,17 +58,33 @@ public class MatchManagerImpl implements MatchManager {
     
 }
 
-    private List<Match> executeQueryForMatches(PreparedStatement st) throws SQLException {
+    /*
+    postupne prechaza riadky ktore vrati prepared statment s databzi a uklada ich do listu
+    argumentom rowVersion vyberam ktore stlpce ma zaujimaju. Prijatelne hodnoty su 0 alebo 1
+    */
+    private List<Match> executeQueryForMatches(PreparedStatement st, int rowVersion) throws SQLException {
         ResultSet rs = st.executeQuery();
         List<Match> result = new ArrayList<Match>();
         while (rs.next()) {
-            result.add(rowToMatch(rs));
+            switch (rowVersion) {
+                case 0 : result.add(rowToMatch(rs));
+                    break;
+                case 1 : result.add(rowToMatch1(rs));
+                    break;
+                default : throw new IllegalArgumentException("Wrong paramter for executeQueryForMatches");    
+            }        
         }
         return result;    
     }
-
+    /*
+    nacita riadok z tabulky a ulozi ho do instancie Match
+    vracia prave hodnotu typu Match
+    su 2. varianty tejto metody, vyberam na zaklade toho ktore hodnoty
+    chcem s databaz precitat   
+    */
     private Match rowToMatch(ResultSet rs) throws SQLException {
         Match m = new Match();
+        m.setId(rs.getInt("MATCH_ID"));
         m.setOpponent(rs.getString("OPPONENT"));
         m.setOpponentGoals(rs.getInt("SPARTA_GOALS"));
         m.setOpponentPenalty(rs.getInt("OPPONET_PENALTY"));
@@ -144,6 +161,10 @@ public class MatchManagerImpl implements MatchManager {
         
     }
 
+    /*
+    //nacita riadok z tabulky a ulozi ho do instancie MatchTeam
+    //vracia prave hodnotu typu MatchTeam
+    */
     private MatchesTeam rowToMatchTeam(ResultSet rs) throws SQLException{
         MatchesTeam team = new MatchesTeam();
         team.setOpponent(rs.getString("OPPONENT"));
@@ -156,7 +177,48 @@ public class MatchManagerImpl implements MatchManager {
         return team;
         
     }
+
+    @Override
+    public List<Match> getMatchesVSSingleOpponent(int year, String opponent, int isPlayoff) {
+                checkDataSource();
+        Connection conn = null;
+        PreparedStatement st = null;
+        String playoff = null;        
+        switch (isPlayoff) {
+            case 0: playoff = "AND PLAYOFF = 'playoff'";
+                    break;
+            case 1: playoff = "AND PLAYOFF IS NULL";
+                    break;
+            case 2: playoff = "";    
+        }
+        try{
+            conn = dataSource.getConnection();
+            String SQL = "SELECT DATE,SPARTA_GOALS, OPPONET_GOALS, BEST_PLAYER, HOME from \"MATCH\"" +
+                    "    WHERE SEASON = ? AND OPPONENT = '" + opponent + "' " + playoff + "";
+            st = conn.prepareStatement(SQL);                    
+            st.setInt(1, year);
+            
+            return executeQueryForMatches(st, 1);
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Error when getting matches from database. Method getMatchesVSSingleOpponent");
+            throw new RuntimeException("Error when getting matches from database. Method getMatchesVSSingleOpponent", ex);
+        } finally {
+            DBUtils.closeQuietly(conn, st);
+        }
+    }
     
-    
+    //nacita riadok z tabulky a ulozi ho do instancie Match
+    //vracia prave hodnotu typu Match
+    private Match rowToMatch1(ResultSet rs) throws SQLException{
+        Match m = new Match();
+        m.setDate(rs.getDate("DATE"));       
+        m.setSpartaGoals(rs.getInt("SPARTA_GOALS"));
+        m.setOpponentGoals(rs.getInt("OPPONET_GOALS"));        
+        m.setBestPlayer(rs.getString("BEST_PLAYER"));
+        m.setHome(rs.getString("HOME"));
+        return m;    
+    }
+     
+   
     
     }

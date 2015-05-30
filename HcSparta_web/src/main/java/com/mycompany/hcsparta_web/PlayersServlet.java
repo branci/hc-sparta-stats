@@ -5,6 +5,9 @@
  */
 package com.mycompany.hcsparta_web;
 
+import com.mycompany.parcinghtml.MatchManager;
+import com.mycompany.parcinghtml.MatchesTeam;
+import com.mycompany.parcinghtml.Player;
 import com.mycompany.parcinghtml.PlayerManager;
 import com.mycompany.parcinghtml.PlayerManagerImpl;
 import com.mycompany.parcinghtml.ServiceFailureException;
@@ -23,6 +26,8 @@ import java.sql.Date;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 
 /**
@@ -43,11 +48,12 @@ public class PlayersServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        showPlayersList(request, response);
+        
+        showPlayersList(request, response, 2015, "NAME", true, 2);
+        
     }
 
     /**
@@ -63,89 +69,29 @@ public class PlayersServlet extends HttpServlet {
             throws ServletException, IOException { 
         String action = request.getPathInfo();
         request.setCharacterEncoding("utf-8");
-        /*
-        if (action.equals("/add")) {
+      
+        if (action.equals("/order")) {
+            int season = Integer.parseInt(request.getParameter("seasonItem"));
+            String orderBy = request.getParameter("orderItem");
+            boolean ascending =Boolean.parseBoolean(request.getParameter("ascItem"));
             
-            String fullName = request.getParameter("fullName");
+            showPlayersList(request, response, season, orderBy, ascending, 2);
+            //response.sendRedirect(request.getContextPath()+ "/players");
             
-            String idCard = request.getParameter("idCard");
-            
-            if (fullName == null || fullName.length() == 0 || (request.getParameter("birthDate")).isEmpty() || !isValidDate(request.getParameter("birthDate")) || idCard == null || idCard.length() == 0 || idCard.isEmpty()) {
-                request.setAttribute("fail", "All attributes must be filled!");
-                showCustomersList(request, response);
-                return;
-            }
-            Date birthDate = date(request.getParameter("birthDate"));
-            
-            try {
-                Customer customer = new Customer();
-                customer.setFullName(fullName);
-                customer.setBirthDate(birthDate);
-                customer.setIdCard(idCard);
-                getCustomerManager().createCustomer(customer);
-                log.debug("created {}",customer);
-                response.sendRedirect(request.getContextPath()+ "/customers");
-                return;
-            } catch (ServiceFailureException ex) {
-                log.error("Cannot add customer", ex);
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
-                return;
-            }
-        } else if (action.equals("/delete")) {
-            try {
-                Long id = Long.valueOf(request.getParameter("id"));
-                getCustomerManager().deleteCustomer(getCustomerManager().getCustomerById(id));
-                log.debug("deleted customer {}",id);
-                response.sendRedirect(request.getContextPath()+"/customers");
-                return;
-            } catch (ServiceFailureException ex) {
-                log.error("Cannot delete customer", ex);
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
-                return;
-            } 
-        } else if (action.equals("/update")) {
-            try {
-                Long id = Long.valueOf(request.getParameter("id"));
-                Customer customer = getCustomerManager().getCustomerById(id);
-                
-                String fullName = request.getParameter("fullName");
-                Date birthDate = date(request.getParameter("birthDate"));
-                String idCard = request.getParameter("idCard");
-                
-                customer.setFullName(fullName);
-                customer.setBirthDate(birthDate);
-                customer.setIdCard(idCard);
-                
-                getCustomerManager().updateCustomer(customer);
-                log.debug("updated customer {}", id);
-                response.sendRedirect(request.getContextPath()+"/customers");
-            } catch (ServiceFailureException ex) {
-                log.error("Cannot update customer", ex);
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
-                return;
-            } 
-        } else {
-            log.error("Unknown action" + action);
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Unknown action " + action );
+            return;
         }
-        */   
-    }
-
-    
-    private java.sql.Date date(String date) {
-        return Date.valueOf(date);
     }
     
-    private PlayerManagerImpl getPlayerManager() {
-        PlayerManagerImpl pl = (PlayerManagerImpl) getServletContext().getAttribute("playerManager");
-        //pl.initFunction();
-        return pl;
+    private PlayerManager getPlayerManager() {
+        return (PlayerManager) getServletContext().getAttribute("playerManager");
     }
     
-    private void showPlayersList (HttpServletRequest request, HttpServletResponse response) 
+    
+    private void showPlayersList (HttpServletRequest request, HttpServletResponse response, int year, String orderBy, boolean ascending, int isPlayoff) 
             throws ServletException, IOException {
-        try {           
-             request.setAttribute("players", getPlayerManager().getAllPlayers(2015, "NAME", true));
+        try {
+            List<Player> result = getPlayerManager().getAllPlayers(year, orderBy, ascending, isPlayoff);
+            request.setAttribute("players", result);
              request.getRequestDispatcher("/list.jsp").forward(request, response);
 
         } catch (ServiceFailureException ex) {
@@ -153,4 +99,5 @@ public class PlayersServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
         }
     }      
+   
 }

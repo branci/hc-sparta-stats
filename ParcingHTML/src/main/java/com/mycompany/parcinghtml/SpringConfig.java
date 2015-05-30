@@ -39,5 +39,10 @@ public class SpringConfig {
     public PlayerManagerImpl playerManager() throws SQLException, IOException {
         return new PlayerManagerImpl(dataSource());
     }
-
+    
+    @Bean
+    public MatchManagerImpl matchManager() throws SQLException, IOException {
+        return new MatchManagerImpl(dataSource());
+    }
+    
 }

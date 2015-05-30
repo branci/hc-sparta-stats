@@ -9,17 +9,49 @@
 <html>
 <body>  
 <h1>HC Sparta Praha</h1>
+
+<form action="${pageContext.request.contextPath}/matches" method="get">
+  <input type="submit" value="Matches">
+</form>
+
 <h2>Players</h2>
+
+<form action="${pageContext.request.contextPath}/players/order" method="post">
+    <select name="seasonItem">
+    <option value="2015">2014/15</option>
+    <option value="2014">2013/14</option>
+    <option value="2013">2012/13</option>
+    <option value="2012">2011/12</option>
+    <option value="2011">2010/11</option>
+    <option value="2010">2009/10</option>
+  </select>
+  <select name="orderItem">
+    <option value="NAME">Name</option>
+    <option value="GOALS">Goals</option>
+    <option value="ASSISTS">Assists</option>
+    <option value="PENALTY_MINUTES">Penalty minutes</option>
+    <option value="SHOTS">Shots</option>
+    <option value="HITS">Hits</option>
+  </select>
+    <select name="ascItem">
+    <option value="false">Descending</option>
+    <option value="true">Ascending</option>
+  </select>
+  <input type="submit" value="Order by">
+</form>
+    
 <table border="1">
     <thead>
     <tr>
         <th>Id</th>
         <th>Name</th>
+        <%-- 
         <th>Age</th>
         <th>Height</th>
         <th>Weight</th>
         <th>Num</th>
         <th>Pos</th>
+        --%>
         <th>Goals</th>
         <th>Assists</th>
         <th>Penalty minutes</th>
@@ -30,12 +62,19 @@
     <c:forEach items="${players}" var="player">
         <tr>
             <td><c:out value="${player.id}"/></td>
-            <td><c:out value="${player.name}"/></td>
-            <%--<td><c:out value="${player.age}"/></td>
+            <%--<td><c:out value="${player.name}"/></td>--%>
+            <td
+            <form action="${pageContext.request.contextPath}/matches" method="get">
+                    <input type="submit" value="${player.name}">
+            </form>
+            </td>
+            <%--
+            <td><c:out value="${player.age}"/></td>
             <td><c:out value="${player.height}"/></td>
             <td><c:out value="${player.weight}"/></td>
             <td><c:out value="${player.playerNum}"/></td>
-            <td><c:out value="${player.position}"/></td>--%>
+            <td><c:out value="${player.position}"/></td>
+            --%>
             <td><c:out value="${player.goals}"/></td>
             <td><c:out value="${player.assist}"/></td>
             <td><c:out value="${player.penalty}"/></td>
@@ -44,7 +83,6 @@
         </tr>
     </c:forEach>
 </table>
-<br><br><br>
 
 </body>
 </html>
