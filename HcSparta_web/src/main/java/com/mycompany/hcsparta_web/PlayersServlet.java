@@ -5,6 +5,8 @@
  */
 package com.mycompany.hcsparta_web;
 
+import com.mycompany.parcinghtml.MatchManager;
+import com.mycompany.parcinghtml.MatchesTeam;
 import com.mycompany.parcinghtml.Player;
 import com.mycompany.parcinghtml.PlayerManager;
 import com.mycompany.parcinghtml.PlayerManagerImpl;
@@ -49,8 +51,10 @@ public class PlayersServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
+        showMatchesList(request, response, 2015, 2);
         showPlayersList(request, response, 2015, "NAME", true, 2);
+        
     }
 
     /**
@@ -96,6 +100,10 @@ public class PlayersServlet extends HttpServlet {
         return (PlayerManager) getServletContext().getAttribute("playerManager");
     }
     
+    private MatchManager getMatchManager() {
+        return (MatchManager) getServletContext().getAttribute("matchManager");
+    }
+    
     private void showPlayersList (HttpServletRequest request, HttpServletResponse response, int year, String orderBy, boolean ascending, int isPlayoff) 
             throws ServletException, IOException {
         try {
@@ -108,5 +116,19 @@ public class PlayersServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
         }
     }
+        
+    private void showMatchesList (HttpServletRequest request, HttpServletResponse response, int year, int isPlayoff) 
+            throws ServletException, IOException {
+        try {
+            List<MatchesTeam> result = getMatchManager().getMatchesOpponent(year, isPlayoff);
+            request.setAttribute("opponents", result);
+             request.getRequestDispatcher("/list.jsp").forward(request, response);
+
+        } catch (ServiceFailureException ex) {
+            log.error("cannot show matches for opponents", ex);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
+        }
+    }
+    
    
 }

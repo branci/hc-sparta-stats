@@ -6,6 +6,7 @@
 package com.mycompany.parcinghtml;
 
 import static com.mycompany.parcinghtml.PlayerManagerImpl.executeQueryForMultiplePlayers;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,6 +28,11 @@ public class MatchManagerImpl implements MatchManager {
     private static final Logger logger = Logger.getLogger(
             MatchManagerImpl.class.getName());
     
+    public MatchManagerImpl(DataSource dataSource) {
+        this.dataSource = dataSource;    
+    }
+    
+        
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }

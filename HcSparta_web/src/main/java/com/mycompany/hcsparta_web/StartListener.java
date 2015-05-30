@@ -6,6 +6,7 @@
 package com.mycompany.hcsparta_web;
 
 
+import com.mycompany.parcinghtml.MatchManagerImpl;
 import com.mycompany.parcinghtml.PlayerManager;
 import com.mycompany.parcinghtml.PlayerManagerImpl;
 import com.mycompany.parcinghtml.SpringConfig;
@@ -36,6 +37,9 @@ public class StartListener implements ServletContextListener {
         servletContext.setAttribute("playerManager", springContext.getBean("playerManager", PlayerManagerImpl.class));
         PlayerManagerImpl pl = (PlayerManagerImpl) servletContext.getAttribute("playerManager");
         pl.initFunction();
+        
+        servletContext.setAttribute("matchManager", springContext.getBean("matchManager", MatchManagerImpl.class));
+        
         log.info("vytvořeny manažery");
                 
 

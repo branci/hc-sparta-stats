@@ -29,10 +29,9 @@ public class PlayerManagerImpl implements PlayerManager {
 
     
     public PlayerManagerImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-        
-
+        this.dataSource = dataSource;    
     }
+    
     public void initFunction(){
         ParsingClassPlayers psp = new ParsingClassPlayers(dataSource);
         try {      
@@ -43,7 +42,7 @@ public class PlayerManagerImpl implements PlayerManager {
         ParsingAllMatches parsing = new ParsingAllMatches(dataSource);                
 
         try {
-            parsing.parsingMatches(2015,2015);
+            parsing.parsingMatches(2010,2015);
         } catch (IOException ex) {
             Logger.getLogger(PlayerManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -212,9 +211,10 @@ public class PlayerManagerImpl implements PlayerManager {
             DBUtils.closeQuietly(conn, st);
         }             
     }        
-
+    
+    /*
     public Object getAllPlayers(int i, String name, boolean b) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    */
 }
