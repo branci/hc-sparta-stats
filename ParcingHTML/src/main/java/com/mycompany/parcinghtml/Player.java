@@ -23,7 +23,7 @@ public class Player {
     private Integer penalty;
     private Integer shots;
     private Integer hits;
-    private Double shotEffectivity;
+    private Integer shotEffectivity;
     
     private Integer firstThird;
     private Integer secondThird;
@@ -62,7 +62,7 @@ public class Player {
         return goals;
     }
 
-    public Double getShotEffectivity() {
+    public Integer getShotEffectivity() {
         return shotEffectivity;
     }
 
@@ -116,7 +116,7 @@ public class Player {
         this.extraTime = extraTime;
     }
 
-    public void setShotEffectivity(Double shotEffectivity) {
+    public void setShotEffectivity(Integer shotEffectivity) {
         this.shotEffectivity = shotEffectivity;
     }
     

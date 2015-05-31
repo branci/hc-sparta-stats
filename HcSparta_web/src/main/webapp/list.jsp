@@ -78,7 +78,7 @@
             <td><c:out value="${player.penalty}"/></td>
             <td><c:out value="${player.shots}"/></td>
             <td><c:out value="${player.hits}"/></td>
-            <td><c:out value="${player.shotEffectivity*100} %"/></td>
+            <td><c:out value="${player.shotEffectivity} %"/></td>
         </tr>
     </c:forEach>
 </table>

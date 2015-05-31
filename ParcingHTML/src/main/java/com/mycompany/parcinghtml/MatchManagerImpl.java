@@ -201,6 +201,7 @@ public class MatchManagerImpl implements MatchManager {
                     "    WHERE SEASON = ? AND OPPONENT = '" + opponent + "' " + playoff + "";
             st = conn.prepareStatement(SQL);                    
             st.setInt(1, year);
+            System.out.println(year);
             
             return executeQueryForMatches(st, 1);
         } catch (SQLException ex) {

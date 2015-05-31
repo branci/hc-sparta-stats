@@ -43,10 +43,8 @@ public class PlayerManagerImpl implements PlayerManager {
         ParsingAllMatches parsing = new ParsingAllMatches(dataSource);                
 
         try {
-            parsing.parsingMatches(2012,2015);
-        } catch (IOException ex) {
-            Logger.getLogger(PlayerManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+            parsing.parsingMatches(2014,2015);
+        } catch (IOException | SQLException ex) {
             Logger.getLogger(PlayerManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -75,7 +73,7 @@ public class PlayerManagerImpl implements PlayerManager {
         result.setShots(rs.getInt("SHOTS"));
         result.setHits(rs.getInt("HITS"));
         double d = (((double)result.getGoals())/result.getShots());
-        result.setShotEffectivity((double)Math.round(d*100) /100);
+        result.setShotEffectivity((int)Math.round((d*100)));
         return result;
     } 
 

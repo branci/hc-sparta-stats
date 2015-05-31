@@ -48,11 +48,11 @@
         </tr>
     </thead>
     <tr>
-        <td><c:out value="${players.name}"/></td>
-        <td><c:out value="${players.age}"/></td>
-        <td><c:out value="${players.height}"/></td>
-        <td><c:out value="${players.weight}"/></td>
-        <td><c:out value="${players.playerNum}"/></td>
+        <td><c:out value="${player.name}"/></td>
+        <td><c:out value="${player.age}"/></td>
+        <td><c:out value="${player.height}"/></td>
+        <td><c:out value="${player.weight}"/></td>
+        <td><c:out value="${player.playerNum}"/></td>
         <td><c:out value="${player.position}"/></td> 
         <%--
         <td>

@@ -116,13 +116,12 @@ public class PlayersServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             Player result = getPlayerManager().getPlayerInfo(id, year);
-            request.setAttribute("players", result);
+            request.setAttribute("player", result);
             request.getRequestDispatcher("/list3.jsp").forward(request, response);
 
         } catch (ServiceFailureException ex) {
             log.error("cannot show player", ex);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
         }
-    }  
-   
+    }     
 }
