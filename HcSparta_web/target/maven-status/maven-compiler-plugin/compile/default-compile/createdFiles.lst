@@ -1,2 +1,3 @@
-com\mycompany\hcsparta_web\PlayersServlet.class
-com\mycompany\hcsparta_web\StartListener.class
+com/mycompany/hcsparta_web/PlayersServlet.class
+com/mycompany/hcsparta_web/StartListener.class
+com/mycompany/hcsparta_web/MatchesServlet.class

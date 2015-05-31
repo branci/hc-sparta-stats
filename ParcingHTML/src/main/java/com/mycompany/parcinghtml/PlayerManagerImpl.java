@@ -43,7 +43,7 @@ public class PlayerManagerImpl implements PlayerManager {
         ParsingAllMatches parsing = new ParsingAllMatches(dataSource);                
 
         try {
-            parsing.parsingMatches(2010,2015);
+            parsing.parsingMatches(2012,2015);
         } catch (IOException ex) {
             Logger.getLogger(PlayerManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

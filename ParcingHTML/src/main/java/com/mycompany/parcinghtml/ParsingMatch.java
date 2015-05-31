@@ -65,10 +65,9 @@ public class ParsingMatch {
         }
         return apn;
     }
-
+    //Zisti datum zapasu a ci zapas je playoff 
     public void parseDate(String date, Match match) {
         String[] array = date.split(",");
-        //System.out.println(array[0]);
         if(array[0].matches(".[a-zA-Z].")) match.setPlayoff("playoff");
         array = array[1].split(" ");
 
@@ -96,6 +95,7 @@ public class ParsingMatch {
         String refereeElementText = null;
         //Podmienka pre bestPlayera, od roku v 2013 sa neuvadza na strankach
         try {
+            //V pripade ak hra sparta doma
             if (match.getSeason() >= 2014) {
                     bestPlayerElementText = gameDetailsElement.getAllElements().get(9).text();
                 }
@@ -130,7 +130,7 @@ public class ParsingMatch {
                             match.setBestPlayer(gameDetails.substring(gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length(), gameDetails.indexOf("–", gameDetails.indexOf(bestPlayerElementText) + bestPlayerElementText.length())).replace(" ", ""));
                           }
                }
-                
+            //V pripade ak je sparta hostom    
             } else {
                 parseSparta(teams.get(1), match);
                 parseOpponent(teams.get(0), match);
@@ -152,10 +152,10 @@ public class ParsingMatch {
             }
             db.addMatch(match);
         } catch (Exception e) {
+            //Neuspesne ziskane zapasy sa loguju do suboru
             logMatch.log(Level.SEVERE, "Parsing failed for match with id: " + match.toString(), e);
             return;
         }
-        //System.out.println(match);
         if (match.getSpartaGoals() != 0) {
             parseGoals(gameDetails.substring(gameDetails.indexOf(goalsElementText) + goalsElementText.length(), gameDetails.indexOf(refereeElementText) - 2), match);
         }
@@ -195,7 +195,7 @@ public class ParsingMatch {
         }
         return playerID;
     }
-    
+    //Ziska udaje o strelenych goloch a asistenciach
     public void parseGoals(String text, Match match) throws SQLException{
 
         if(match.getOpponentGoals() != 0){
@@ -241,7 +241,6 @@ public class ParsingMatch {
                 assist.setPlayerID(getIdOfPlayer(assist.getPlayer()));
                 db.addAssist(assist);
                 if(assist.getPlayerID() == 0) logPlayer.log(Level.SEVERE, "Player wasnt found in db: " + assist.toString());
-                ///System.out.println(assist);
                 assistID++;
                 continue;
             }
@@ -250,20 +249,19 @@ public class ParsingMatch {
             goal.setPlayer(part.replace(",", "") + tmp);
             goal.setPlayerID(getIdOfPlayer(goal.getPlayer()));
             db.addGoal(goal);
-            //System.out.println(goal);
             if(goal.getPlayerID() == 0) logPlayer.log(Level.SEVERE, "Player wasnt found in db: " + goal.toString());
             tmp = "";
         }
     }
     
-    
+    //Ziska udaje o protihracovi
     public void parseOpponent(Element opponent, Match match){
         
         int goals = Integer.parseInt(opponent.child(1).text());
         match.setOpponentGoals(goals);       
         match.setOpponent(opponent.child(2).child(0).text().replace(":", ""));
     }
-    
+    //Ziska udaje o Sparte
     public void parseSparta(Element sparta, Match match) throws SQLException{
         
         int goals = Integer.parseInt(sparta.child(1).text());
@@ -274,7 +272,7 @@ public class ParsingMatch {
         else 
             parsePlayers(sparta.child(2).text().substring(sparta.child(2).text().indexOf(":") + 1), match.getId());
     }
-    
+    //Ziska supisku sparty v aktualnom zapase
     public void parsePlayers(String text, int id) throws SQLException{
    
         String[] firstParcing;

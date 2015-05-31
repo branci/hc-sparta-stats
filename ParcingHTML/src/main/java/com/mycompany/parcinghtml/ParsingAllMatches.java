@@ -26,7 +26,7 @@ public class ParsingAllMatches {
         this.dataSource = dataSource;
     }
     //Metoda prechadza  zapasy pomocou odkazov na podrobnejsie udaje
-    //Parametre bere sezony, ktore sa maju prehladat 
+    //Parameter bere sezony, ktore sa maju prehladat 
     public void parsingMatches(int firstSeason, int lastSeason) throws IOException, SQLException {
         int matchID = 1;
         DatabaseManager db = new DatabaseManager(dataSource);

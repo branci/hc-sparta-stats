@@ -14,7 +14,7 @@
   <input type="submit" value="Players">
 </form>
   
-<h2>Matches</h2>
+<h2>Opponents</h2>
 
 <form action="${pageContext.request.contextPath}/matches/season" method="post">
     <select name="seasonItem">
@@ -36,6 +36,8 @@
 <table border="1">
     <thead>
     <tr>
+        <th> </th>
+        <th> </th>
         <th>Opponent</th>
         <th>S-win</th>
         <th>S-los</th>
@@ -49,7 +51,19 @@
     </thead>
     <c:forEach items="${opponents}" var="opp">
         <tr>
-            <td><c:out value="${opp.opponent}"/></td>
+            <td>
+                <form action="${pageContext.request.contextPath}/matches/opponent" method="post">
+                  <input type="hidden" name="oppItem" value="${opp.opponent}" />
+                  <input type="submit" value="matches">
+                </form>
+            </td>
+            <td>
+                <form action="${pageContext.request.contextPath}/matches/players" method="post">
+                  <input type="hidden" name="oppItem" value="${opp.opponent}" />
+                  <input type="submit" value="S players">
+                </form>
+            </td>
+            <td><c:out value="${opp.opponent}"/></td> 
             <td><c:out value="${opp.win}"/></td>
             <td><c:out value="${opp.lose}"/></td>
             <td><c:out value="${opp.opponentGoals}"/></td>
