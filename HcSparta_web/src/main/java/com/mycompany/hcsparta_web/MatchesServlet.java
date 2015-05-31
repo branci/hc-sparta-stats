@@ -5,6 +5,7 @@
  */
 package com.mycompany.hcsparta_web;
 
+import com.mycompany.parcinghtml.Match;
 import com.mycompany.parcinghtml.MatchManager;
 import com.mycompany.parcinghtml.MatchesTeam;
 import com.mycompany.parcinghtml.Player;
@@ -78,7 +79,36 @@ public class MatchesServlet extends HttpServlet {
             showMatchesList(request, response, season, games);
             
             return;
-        } 
+        } else if (action.equals("/opponent")) {
+            String opponent = request.getParameter("oppItem");
+            
+            showMatchesAgainstOpp(request, response, 2015, opponent, 2);
+            
+            return;
+        } else if (action.equals("/opponent/year")) {
+            String opponent = request.getParameter("oppItem");
+            int season = Integer.parseInt(request.getParameter("seasonItem"));
+            int games = Integer.parseInt(request.getParameter("gamesItem"));
+            
+            showMatchesAgainstOpp(request, response, season, opponent, games);
+            
+            return;
+        } else if (action.equals("/players")) {
+            String opponent = request.getParameter("oppItem");
+            
+            showPlayersAgainstOpp(request, response, opponent, 2015, "NAME", true, 2, 0);
+            
+            return;
+        } else if (action.equals("/players/year")) {
+            String opponent = request.getParameter("oppItem");
+            int season = Integer.parseInt(request.getParameter("seasonItem"));
+            int position = Integer.parseInt(request.getParameter("positionItem"));
+            int games = Integer.parseInt(request.getParameter("gamesItem"));
+            String orderBy = request.getParameter("orderItem");
+            boolean ascending =Boolean.parseBoolean(request.getParameter("ascItem"));
+            
+            showPlayersAgainstOpp(request, response, opponent, season, orderBy, ascending, games, position);  
+        }
     }
 
  
@@ -87,6 +117,10 @@ public class MatchesServlet extends HttpServlet {
         return (MatchManager) getServletContext().getAttribute("matchManager");
     }
     
+    private PlayerManager getPlayerManager() {
+        return (PlayerManager) getServletContext().getAttribute("playerManager");
+    }
+     
     private void showMatchesList (HttpServletRequest request, HttpServletResponse response, int year, int isPlayoff) 
             throws ServletException, IOException {
         try {
@@ -100,5 +134,31 @@ public class MatchesServlet extends HttpServlet {
         }
     }
     
+    private void showMatchesAgainstOpp (HttpServletRequest request, HttpServletResponse response, int year, String opponent, int isPlayoff) 
+            throws ServletException, IOException {
+        try {
+            List<Match> result = getMatchManager().getMatchesVSSingleOpponent(year, opponent, isPlayoff);
+            request.setAttribute("matches", result);
+             request.getRequestDispatcher("/list4.jsp").forward(request, response);
+
+        } catch (ServiceFailureException ex) {
+            log.error("cannot show matches for opponent", ex);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
+        }
+    }
+    
+    private void showPlayersAgainstOpp (HttpServletRequest request, HttpServletResponse response, String opponent, int year, String orderBy, boolean ascending, int isPlayoff, int position) 
+            throws ServletException, IOException {
+        try {
+            List<Player> result = getPlayerManager().getAllPlayersVSTeams(opponent, year, orderBy, ascending, isPlayoff, position);
+            request.setAttribute("players", result);
+            request.setAttribute("opponent", opponent);
+            request.getRequestDispatcher("/list5.jsp").forward(request, response);
+
+        } catch (ServiceFailureException ex) {
+            log.error("cannot show matches for opponent", ex);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
+        }
+    }
    
 }

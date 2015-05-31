@@ -52,7 +52,7 @@ public class PlayersServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        showPlayersList(request, response, 2015, "NAME", true, 2);
+        showPlayersList(request, response, 2015, "NAME", true, 2, 0);
         
     }
 
@@ -69,16 +69,28 @@ public class PlayersServlet extends HttpServlet {
             throws ServletException, IOException { 
         String action = request.getPathInfo();
         request.setCharacterEncoding("utf-8");
-      
+        
         if (action.equals("/order")) {
             int season = Integer.parseInt(request.getParameter("seasonItem"));
+            int position = Integer.parseInt(request.getParameter("positionItem"));
+            int games = Integer.parseInt(request.getParameter("gamesItem"));
             String orderBy = request.getParameter("orderItem");
             boolean ascending =Boolean.parseBoolean(request.getParameter("ascItem"));
             
-            showPlayersList(request, response, season, orderBy, ascending, 2);
-            //response.sendRedirect(request.getContextPath()+ "/players");
+            showPlayersList(request, response, season, orderBy, ascending, games, position);
             
             return;
+        } else if (action.equals("/player")) {
+            int id = Integer.parseInt(request.getParameter("idItem"));
+            
+            showPlayerInfo(request, response, id, 2015);
+            
+            return;
+        } else if (action.equals("/player/year")) {
+            int id = Integer.parseInt(request.getParameter("idItem"));
+            int season = Integer.parseInt(request.getParameter("seasonItem"));
+            
+            showPlayerInfo(request, response, id, season);
         }
     }
     
@@ -87,10 +99,10 @@ public class PlayersServlet extends HttpServlet {
     }
     
     
-    private void showPlayersList (HttpServletRequest request, HttpServletResponse response, int year, String orderBy, boolean ascending, int isPlayoff) 
+    private void showPlayersList (HttpServletRequest request, HttpServletResponse response, int year, String orderBy, boolean ascending, int isPlayoff, Integer position) 
             throws ServletException, IOException {
         try {
-            List<Player> result = getPlayerManager().getAllPlayers(year, orderBy, ascending, isPlayoff);
+            List<Player> result = getPlayerManager().getAllPlayers(year, orderBy, ascending, isPlayoff, position);
             request.setAttribute("players", result);
              request.getRequestDispatcher("/list.jsp").forward(request, response);
 
@@ -98,6 +110,19 @@ public class PlayersServlet extends HttpServlet {
             log.error("cannot show players", ex);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
         }
-    }      
+    }  
+    
+    private void showPlayerInfo (HttpServletRequest request, HttpServletResponse response, Integer id, int year) 
+            throws ServletException, IOException {
+        try {
+            Player result = getPlayerManager().getPlayerInfo(id, year);
+            request.setAttribute("players", result);
+            request.getRequestDispatcher("/list3.jsp").forward(request, response);
+
+        } catch (ServiceFailureException ex) {
+            log.error("cannot show player", ex);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
+        }
+    }  
    
 }

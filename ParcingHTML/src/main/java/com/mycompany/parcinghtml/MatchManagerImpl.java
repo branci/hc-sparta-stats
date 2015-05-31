@@ -27,6 +27,10 @@ public class MatchManagerImpl implements MatchManager {
     private static final Logger logger = Logger.getLogger(
             MatchManagerImpl.class.getName());
     
+    public MatchManagerImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+        
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -193,7 +197,7 @@ public class MatchManagerImpl implements MatchManager {
         }
         try{
             conn = dataSource.getConnection();
-            String SQL = "SELECT DATE,SPARTA_GOALS, OPPONET_GOALS, BEST_PLAYER, HOME from \"MATCH\"" +
+            String SQL = "SELECT OPPONENT,DATE,SPARTA_GOALS, OPPONET_GOALS, BEST_PLAYER, HOME from \"MATCH\"" +
                     "    WHERE SEASON = ? AND OPPONENT = '" + opponent + "' " + playoff + "";
             st = conn.prepareStatement(SQL);                    
             st.setInt(1, year);
@@ -211,6 +215,7 @@ public class MatchManagerImpl implements MatchManager {
     //vracia prave hodnotu typu Match
     private Match rowToMatch1(ResultSet rs) throws SQLException{
         Match m = new Match();
+        m.setOpponent(rs.getString("OPPONENT"));
         m.setDate(rs.getDate("DATE"));       
         m.setSpartaGoals(rs.getInt("SPARTA_GOALS"));
         m.setOpponentGoals(rs.getInt("OPPONET_GOALS"));        
