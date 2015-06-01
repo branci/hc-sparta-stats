@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article>
+    <articleinfo>
+        <title>hc-sparta-stats</title>
+
+        <author>
+            <firstname>Branislav</firstname>
+
+            <surname>Smik</surname>
+            <affiliation>
+                <orgname>fi.muni.cz</orgname>
+            </affiliation>
+        </author>
+
+        <pubdate>1.6.2015</pubdate>
+    </articleinfo>
+
+    <section>
+        <title>Záverečná správa</title>
+        <para>
+            Mojou úlohou v tomto projekte bolo vytvoriť samotné webové rozhranie.
+        </para>
+    </section>
+    
+	<section>
+        <title>Maven web application</title>
+        <para>
+            Vytvoril som Maven web application (HcSparta_web), ktorá má nastavenú dependecy na projekte ParsingHTML v ktorom sa údaje zo stránok hcsparta.cz sťahujú, parsujú a ukladajú do databázy. 
+        </para>
+    </section>
+
+    <section>
+        <title>Servlets</title>
+        <para>
+           Ďalej som postupoval vytvorením servletov, konkrétne som využíval knižnicu javax.servlet.*, a k nim prislúchajúcich .jsp stránok. V servletoch som implementoval metódy na spracovanie HTTP requestov a ich pomocné metódy.
+        </para>
+    </section>
+
+    <section>
+        <title>JSP</title>
+        <para>
+               Na samotné vytvorenie HTML stránok a následné zobrazenie údajov zo serlvetov som využíval technológiu Java Server Pages. V .jsp listoch som využíval možnosti jazyka JSP EL na rozumné vypisovanie údajov, ktoré vracali metódy z projektu ParsingHTML. 
+        </para>
+    </section>
+ 
+</article>
