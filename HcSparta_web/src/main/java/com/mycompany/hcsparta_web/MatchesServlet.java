@@ -37,7 +37,8 @@ import javax.servlet.annotation.WebServlet;
  */
 @WebServlet( MatchesServlet.URL_MAPPING + "/*")
 public class MatchesServlet extends HttpServlet {
-
+    private int season;
+    private String opponent;
     public static final String URL_MAPPING = "/matches";
     private final static Logger log = LoggerFactory.getLogger(MatchesServlet.class);
     
@@ -70,39 +71,31 @@ public class MatchesServlet extends HttpServlet {
             throws ServletException, IOException { 
         String action = request.getPathInfo();
         request.setCharacterEncoding("utf-8");
-        
-        if (action.equals("/season")) {
-            
-           int season = Integer.parseInt(request.getParameter("seasonItem"));
-           
-            int games = Integer.parseInt(request.getParameter("gamesItem"));
-            
+        if (action.equals("/season")) {            
+            season = Integer.parseInt(request.getParameter("seasonItem"));           
+            int games = Integer.parseInt(request.getParameter("gamesItem"));            
             showMatchesList(request, response, season, games);
             
             return;
         } else if (action.equals("/opponent")) {
-            String opponent = request.getParameter("oppItem");
-            int season = Integer.parseInt(request.getParameter("seasonItem"));
+             opponent = request.getParameter("oppItem");
+             season = Integer.parseInt(request.getParameter("seasonItem"));
             showMatchesAgainstOpp(request, response, season, opponent, 2);
             
             return;
         } else if (action.equals("/opponent/year")) {
-            String opponent = request.getParameter("oppItem");
-            int season = Integer.parseInt(request.getParameter("seasonItem"));
-            int games = Integer.parseInt(request.getParameter("gamesItem"));
-            
+            int games = Integer.parseInt(request.getParameter("gamesItem"));           
             showMatchesAgainstOpp(request, response, season, opponent, games);
             
             return;
         } else if (action.equals("/players")) {
-            String opponent = request.getParameter("oppItem");
-            int season = Integer.parseInt(request.getParameter("seasonItem"));
+            opponent = request.getParameter("oppItem");
+            
+            season = Integer.parseInt(request.getParameter("seasonItem"));
             showPlayersAgainstOpp(request, response, opponent, season, "NAME", true, 2, 0);
             
             return;
         } else if (action.equals("/players/year")) {
-            String opponent = request.getParameter("oppItem");
-            int season = Integer.parseInt(request.getParameter("seasonItem"));
             int position = Integer.parseInt(request.getParameter("positionItem"));
             int games = Integer.parseInt(request.getParameter("gamesItem"));
             String orderBy = request.getParameter("orderItem");
@@ -111,8 +104,6 @@ public class MatchesServlet extends HttpServlet {
             showPlayersAgainstOpp(request, response, opponent, season, orderBy, ascending, games, position);  
         }
     }
-
- 
     
     private MatchManager getMatchManager() {
         return (MatchManager) getServletContext().getAttribute("matchManager");

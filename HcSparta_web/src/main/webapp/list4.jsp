@@ -20,15 +20,6 @@
 <h2>Matches against <td><c:out value="${matches[0].opponent}"/></td> </h2>
 
 <form action="${pageContext.request.contextPath}/matches/opponent/year" method="post">
-  <input type="hidden" name="oppItem" value="${matches[0].opponent}" />
-  <select name="seasonItem">
-    <option value="2015">2014/15</option>
-    <option value="2014">2013/14</option>
-    <option value="2013">2012/13</option>
-    <option value="2012">2011/12</option>
-    <option value="2011">2010/11</option>
-    <option value="2010">2009/10</option>
-  </select>
   <select name="gamesItem">
     <option value="1">Regular</option>
     <option value="0">Playoff</option>

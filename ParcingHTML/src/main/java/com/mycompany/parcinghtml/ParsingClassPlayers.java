@@ -93,7 +93,6 @@ public class ParsingClassPlayers {
                             st.setInt(7, playerID);
                             int addedRows = st.executeUpdate();
                             playerID++;
-                            //System.out.println(item.child(2).text() + " " + item.child(4).text() + " " + item.child(5).text() + " " + item.child(6).text());
                         }
                     }catch (SQLException ex)
                     {

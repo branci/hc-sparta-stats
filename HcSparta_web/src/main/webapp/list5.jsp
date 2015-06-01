@@ -20,15 +20,7 @@
 <h2>Statistics of players against <td><c:out value="${opponent}"/></td> </h2>
 
 <form action="${pageContext.request.contextPath}/matches/players/year" method="post">
-  <input type="hidden" name="oppItem" value="${opponent}" />
-  <select name="seasonItem">
-    <option value="2015">2014/15</option>
-    <option value="2014">2013/14</option>
-    <option value="2013">2012/13</option>
-    <option value="2012">2011/12</option>
-    <option value="2011">2010/11</option>
-    <option value="2010">2009/10</option>
-  </select>
+
   <select name="positionItem">
     <option value="0">All players</option>
     <option value="1">Back players</option>

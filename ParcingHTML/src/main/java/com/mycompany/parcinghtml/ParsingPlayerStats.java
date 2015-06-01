@@ -97,9 +97,6 @@ public class ParsingPlayerStats {
                 {
                     System.out.println(ex.getMessage());
                 }
-                
-                //System.out.println(player.child(0).text());
-                //System.out.println(player.child(1).text());
             }
             
             
