@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article>
+    <articleinfo>
+        <title>Záverečná správa</title>
+
+        <author>
+            <firstname>Michal</firstname>
+
+            <surname>Savčinský</surname>
+        </author>
+    </articleinfo>
+
+    <section>
+        <title>Záverečná správa</title>
+        <para>Mojou hlavnou úlohou v projekte bolo napísať funkcie pre náš servlet. Najskôr som musel načítať dáta
+                Z databázy.  Využil som na štandardný postup pre prácu s databázou v Jave. Nastavil som našu 
+                embeded databázu ako DataSource a pripojil som sa na ňu. Potom som pomocou inštancie triedy 
+                Statment volal jednotlivé SQL príkazy. Výsledok sa následne uložil do ResultSetu. Na základe hodnôt v 
+                ResultSete nastavím atribúty vo vhodnej triede. Na konci uzavriem spojenie pomocou triedy DBUtils, 
+                ktorá slúži na nejaké databázové operácie.                             
+        </para>
+        <para> Pre niektoré metódy som musel dorobiť vhodné triedy, aby výstup korešpondoval z navrhnutým Use 
+        case diagramom.
+        </para>
+        <para> Mojou ďalšou  úlohou bolo navrhnúť funkčnosť aplikácie. Sústredil som sa najmä na štatistiky hráčov a štatistiky ostatných družstiev voči nášmu. Inšpiroval som stránkami družstiev z NHL.</para>
+        <para> Ďalej som spolupracoval na návrhu servletu – výzore výstupnej webovej aplikácie. </para> 
+    </section>             
+</article>
