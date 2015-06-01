@@ -36,7 +36,7 @@
     <option value="0">Playoff</option>
   </select>
   <p>   </p>
-  <select name="orderItem">
+  <select name="orderItem">1
     <option value="NAME">Name</option>
     <option value="GOALS">Goals</option>
     <option value="ASSISTS">Assists</option>

@@ -19,8 +19,8 @@
 
 <h2>Players</h2>
 
-<form action="${pageContext.request.contextPath}/players/player/year" method="post">
-  <input type="hidden" name="idItem" value="${players.id}" />
+<%--<form action="${pageContext.request.contextPath}/players/player/year" method="post">
+    <input type="hidden" name="idItem" value="${players.id}" />
   <select name="seasonItem">
     <option value="2015">2014/15</option>
     <option value="2014">2013/14</option>
@@ -30,7 +30,7 @@
     <option value="2010">2009/10</option>
   </select>
   <input type="submit" value="Select year">
-</form>
+</form>--%>
     
 <table border="1">
     <thead>
@@ -53,15 +53,12 @@
         <td><c:out value="${player.height}"/></td>
         <td><c:out value="${player.weight}"/></td>
         <td><c:out value="${player.playerNum}"/></td>
-        <td><c:out value="${player.position}"/></td> 
-        <%--
         <td>
             <c:choose>
                 <c:when test="${player.position=='1'}">Back</c:when>
                 <c:otherwise>Front</c:otherwise>
             </c:choose>    
-        </td>
-        --%>
+        </td>       
         <td><c:out value="${player.firstThird}"/></td>
         <td><c:out value="${player.secondThird}"/></td>
         <td><c:out value="${player.thirdThird}"/></td>
