@@ -151,7 +151,6 @@ public class ParsingMatch {
                 }                
             }
             db.addMatch(match);
-            System.out.println(match);
         } catch (Exception e) {
             //Neuspesne ziskane zapasy sa loguju do suboru
             logMatch.log(Level.SEVERE, "Parsing failed for match with id: " + match.toString(), e);

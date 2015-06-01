@@ -23,6 +23,15 @@ public class MatchesTeam {
     private int opponentShots;
     private int spartaPenalty;
     private int opponentPenalty;
+    private int season;
+
+    public int getSeason() {
+        return season;
+    }
+
+    public void setSeason(int season) {
+        this.season = season;
+    }
 
     public int getWin() {
         return win;

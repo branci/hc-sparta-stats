@@ -125,7 +125,9 @@ public class MatchManagerImpl implements MatchManager {
             ResultSet rs = st.executeQuery();
             List<MatchesTeam> result = new ArrayList<MatchesTeam>();
             while (rs.next()) {
-                result.add(rowToMatchTeam(rs));
+                MatchesTeam m = rowToMatchTeam(rs);
+                m.setSeason(year);
+                result.add(m);
             }
             
             String SQL = null;
@@ -197,7 +199,7 @@ public class MatchManagerImpl implements MatchManager {
         }
         try{
             conn = dataSource.getConnection();
-            String SQL = "SELECT OPPONENT,DATE,SPARTA_GOALS, OPPONET_GOALS, BEST_PLAYER, HOME from \"MATCH\"" +
+            String SQL = "SELECT OPPONENT,DATE,SPARTA_GOALS, OPPONET_GOALS, BEST_PLAYER, HOME,SEASON from \"MATCH\"" +
                     "    WHERE SEASON = ? AND OPPONENT = '" + opponent + "' " + playoff + "";
             st = conn.prepareStatement(SQL);                    
             st.setInt(1, year);
@@ -222,6 +224,7 @@ public class MatchManagerImpl implements MatchManager {
         m.setOpponentGoals(rs.getInt("OPPONET_GOALS"));        
         m.setBestPlayer(rs.getString("BEST_PLAYER"));
         m.setHome(rs.getString("HOME"));
+        m.setSeason(rs.getInt("SEASON"));
         return m;    
     }
      

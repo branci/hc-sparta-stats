@@ -70,10 +70,11 @@ public class MatchesServlet extends HttpServlet {
             throws ServletException, IOException { 
         String action = request.getPathInfo();
         request.setCharacterEncoding("utf-8");
-      
+        
         if (action.equals("/season")) {
             
-            int season = Integer.parseInt(request.getParameter("seasonItem"));
+           int season = Integer.parseInt(request.getParameter("seasonItem"));
+           
             int games = Integer.parseInt(request.getParameter("gamesItem"));
             
             showMatchesList(request, response, season, games);
@@ -81,8 +82,8 @@ public class MatchesServlet extends HttpServlet {
             return;
         } else if (action.equals("/opponent")) {
             String opponent = request.getParameter("oppItem");
-            
-            showMatchesAgainstOpp(request, response, 2015, opponent, 2);
+            int season = Integer.parseInt(request.getParameter("seasonItem"));
+            showMatchesAgainstOpp(request, response, season, opponent, 2);
             
             return;
         } else if (action.equals("/opponent/year")) {
@@ -125,6 +126,7 @@ public class MatchesServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             List<MatchesTeam> result = getMatchManager().getMatchesOpponent(year, isPlayoff);
+         
             request.setAttribute("opponents", result);
              request.getRequestDispatcher("/list2.jsp").forward(request, response);
 
@@ -139,7 +141,7 @@ public class MatchesServlet extends HttpServlet {
         try {
             List<Match> result = getMatchManager().getMatchesVSSingleOpponent(year, opponent, isPlayoff);
             request.setAttribute("matches", result);
-             request.getRequestDispatcher("/list4.jsp").forward(request, response);
+            request.getRequestDispatcher("/list4.jsp").forward(request, response);
 
         } catch (ServiceFailureException ex) {
             log.error("cannot show matches for opponent", ex);
