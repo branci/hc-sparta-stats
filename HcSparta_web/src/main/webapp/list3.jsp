@@ -18,19 +18,6 @@
 </form>
 
 <h2>Players</h2>
-
-<%--<form action="${pageContext.request.contextPath}/players/player/year" method="post">
-    <input type="hidden" name="idItem" value="${players.id}" />
-  <select name="seasonItem">
-    <option value="2015">2014/15</option>
-    <option value="2014">2013/14</option>
-    <option value="2013">2012/13</option>
-    <option value="2012">2011/12</option>
-    <option value="2011">2010/11</option>
-    <option value="2010">2009/10</option>
-  </select>
-  <input type="submit" value="Select year">
-</form>--%>
     
 <table border="1">
     <thead>

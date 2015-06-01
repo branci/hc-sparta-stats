@@ -1,4 +1,4 @@
-May 31, 2015 9:03:43 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
+Jun 01, 2015 9:35:47 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
 SEVERE: Parsing failed for match with id: Match{id=9, date=2013-10-04, opponent=Kometa Brno, spartaGoals=1, opponentGoals=2, spartaShots=18, opponentShots=35, spartaPenalty=6, opponentPenalty=1, home=hostia, bestPlayer=null, playoff=null, season=2014}
 java.lang.StringIndexOutOfBoundsException: String index out of range: -10
 	at java.lang.String.substring(String.java:1954)
@@ -6,15 +6,15 @@ java.lang.StringIndexOutOfBoundsException: String index out of range: -10
 	at com.mycompany.parcinghtml.ParsingAllMatches.parsingMatches(ParsingAllMatches.java:45)
 	at com.mycompany.parcinghtml.Main.main(Main.java:40)
 
-May 31, 2015 9:03:45 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+Jun 01, 2015 9:35:50 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
 SEVERE: Player wasnt found in db: Assist{id=84, match=13, player=Přibyl I., goal=55, playerID=0}
-May 31, 2015 9:03:46 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+Jun 01, 2015 9:35:51 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
 SEVERE: Player wasnt found in db: Assist{id=94, match=15, player=Přibyl I., goal=61, playerID=0}
-May 31, 2015 9:03:50 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+Jun 01, 2015 9:35:55 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
 SEVERE: Player wasnt found in db: Assist{id=137, match=21, player=Klimek I., goal=90, playerID=0}
-May 31, 2015 9:03:56 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
+Jun 01, 2015 9:36:02 PM com.mycompany.parcinghtml.ParsingMatch parseGoals
 SEVERE: Player wasnt found in db: Assist{id=208, match=33, player=Novotný, goal=136, playerID=0}
-May 31, 2015 9:04:12 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
+Jun 01, 2015 9:36:22 PM com.mycompany.parcinghtml.ParsingMatch parseMatch
 SEVERE: Parsing failed for match with id: Match{id=60, date=2014-04-06, opponent=Kometa Brno, spartaGoals=2, opponentGoals=3, spartaShots=26, opponentShots=48, spartaPenalty=5, opponentPenalty=5, home=hostia, bestPlayer=null, playoff=playoff, season=2014}
 java.lang.StringIndexOutOfBoundsException: String index out of range: -10
 	at java.lang.String.substring(String.java:1954)

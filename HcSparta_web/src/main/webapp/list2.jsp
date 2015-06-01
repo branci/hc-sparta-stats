@@ -61,6 +61,7 @@
             <td>
                 <form action="${pageContext.request.contextPath}/matches/players" method="post">
                   <input type="hidden" name="oppItem" value="${opp.opponent}" />
+                  <input type = "hidden" name="seasonItem" value="${opp.season}"/>
                   <input type="submit" value="S players">
                 </form>
             </td>

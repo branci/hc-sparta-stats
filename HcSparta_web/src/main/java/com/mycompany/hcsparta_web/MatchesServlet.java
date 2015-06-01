@@ -96,8 +96,8 @@ public class MatchesServlet extends HttpServlet {
             return;
         } else if (action.equals("/players")) {
             String opponent = request.getParameter("oppItem");
-            
-            showPlayersAgainstOpp(request, response, opponent, 2015, "NAME", true, 2, 0);
+            int season = Integer.parseInt(request.getParameter("seasonItem"));
+            showPlayersAgainstOpp(request, response, opponent, season, "NAME", true, 2, 0);
             
             return;
         } else if (action.equals("/players/year")) {
