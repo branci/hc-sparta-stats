@@ -1,7 +1,0 @@
-Moja úloha na projekte bola získať potrebné dáta zo stránky Sparty, vo vhodnom formáte ich spracovať a vložiť do databázy.
-
-K získaniu a k spracovaniu html súboru som využil javovskú knižnicu JSoup. Pomocou nej som stiahol potrebný súbor a vyhladal potrebné elementy. Pracoval som najme s textovou časťou elementov, čize využíval som javovské metódy pre prácu so stringom, a potrebné získané dáta som ukladajal do instancií jednotlivých tried. Dáta sa ukladajú do embended SQL databáze. Ukladanie dát má nastarosti trieda DatabaseManager, ktorá obsahuje všetky potrebné métody pre prácu s databázou. 
-
-Aplikácia dokáže pracovať so sezónami od roku 2010. S ubúdajúcou konzistentnosťou dát nemá význam získavať dáta starších sezón. Ak pri získavní informácií dojde k chybe, program zapíše chybnú časť do logov, ingoruje ju a pokračuje ďalej.
-
-Autor: Kristián Jakubík
