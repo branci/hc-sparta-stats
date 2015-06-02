@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article>
+    <articleinfo>
+        <title>Sparta Praha a hokejisti</title>
+
+        <author>
+            <firstname>Simon</firstname>
+            <surname>Obetko</surname>
+            <affiliation>
+                <orgname>fi.muni.cz</orgname>
+            </affiliation>
+        </author>
+        
+    </articleinfo>
+
+   
+	<section>
+        <title>Majoritna uloha v projekte - parsovanie dat z HTML stranok + navrh SQL tabuliek.</title>
+        <para>
+           Na parsovanie a vkladanie dat do databazy som pouzival jazyk JAVA(jazyk ktory ovladal kazdy clen timu).
+           Pri tejto ulohe som mal sancu skusit si pracu s kniznicou jsoup ktora je volne staihnutelna na http://jsoup.org/. Kniznica je zamerana specialne na parsovanie dokumentov HTML. 
+           Okrem nastudovania a pochopenia dokumentacie k funkciam a datovym strukturam v kniznici Jsoup bolo potrebne nastudovat si zaklady jazyka HTML a strukturu konkretnych HTML dokumentov.
+           Pri parsovani bolo potrebne sa vysporiadat z mnohymi problemami, najma so slabou konzistentnostou dat. 
+           Casto krat sa bolo treba vysporiadat s dlhymi blokmi textu ktore bolo treba parsovat (relativne zlozite).
+           Napriek tomu som si pracu relativne vychutnaval o com znaci aj tento obrazok:
+        </para>
+    </section>
+
+    <section>
+        <title>Minoritna uloha na projekte - dokoncovanie funkcii tahajucich data z Db</title>
+        <para>
+            Tato uloha nebola az taka problematicka (vzhladom na to ze v Db boli data UZ kvalitne a kozistentne).
+            Selecty boli zvycajne trivialne.        
+        </para>
+    </section>
+
+    
+ 
+</article>

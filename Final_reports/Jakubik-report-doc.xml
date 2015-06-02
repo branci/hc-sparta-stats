@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<article>
+    <articleinfo>
+        <title>hc-sparta-stats</title>
+
+        <author>
+            <firstname>Kristián</firstname>
+
+            <surname>Jakubík</surname>
+            <affiliation>
+                <orgname>fi.muni.cz</orgname>
+            </affiliation>
+        </author>
+
+        <pubdate>1.6.2015</pubdate>
+    </articleinfo>
+
+    <section>
+        <title>Záverečná správa</title>
+	<para>
+	Moja úloha na projekte bola získať potrebné dáta zo stránky Sparty, vo vhodnom formáte ich spracovať a vložiť do databázy.
+	</para>        
+	<para>
+	K získaniu a k spracovaniu html súboru som využil javovskú knižnicu JSoup. Pomocou nej som stiahol potrebný súbor a vyhladal potrebné elementy. Pracoval som najmä s textovou časťou elementov, čize využíval som javovské metódy pre prácu so stringom, a potrebné získané dáta som ukladal do instancií jednotlivých tried. Dáta sa ukladajú do embedded SQL databáze. Ukladanie dát má na starosti trieda DatabaseManage, ktorá obsahuje všetky potrebné métody pre prácu s databázou. 
+        </para>
+	<para>
+	Aplikácia dokáže pracovať so sezónami od roku 2010. S ubúdajúcou konzistentnosťou dát nemá význam získavať dáta starších sezón. Ak pri získavaní informácií nastane chyba, program zapíše chybnú časť do logov, ingoruje ju a pokračuje ďalej.		
+	</para>
+    </section>
+ 
+</article>
